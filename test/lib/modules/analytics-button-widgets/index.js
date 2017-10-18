@@ -13,6 +13,11 @@ module.exports = {
     mouthfeel: 'tangy',
     sweetness: 'very'
   },
+  localized: {
+    en: {
+      'flavor.sweetness': 'very-en'
+    }
+  },
   construct: function(self, options) {
     self.pageBeforeSend = function(req) {
       try {

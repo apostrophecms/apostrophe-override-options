@@ -28,9 +28,9 @@ module.exports = {
         req.aposOptions[name] = _.cloneWith(module.options, cloneCustom);
         req.aposOptions[name].__clonedPrimaries = {};
         if (workflow) {
-          var locale = workflow.liveify(locale);
+          var locale = workflow.liveify(req.locale);
           _.each((module.options.localized  && module.options.localized[locale]) || {}, function(val, key) {
-            self.overrideKey(req, key, val);
+            self.overrideLocalKey(req, module, key, val);
           });
         }
       });
@@ -43,6 +43,10 @@ module.exports = {
       _.each(ancestors, function(ancestor) {
         self.applyOverridesFromDoc(req, ancestor);
       });
+    };
+
+    self.overrideLocalKey = function(req, module, key, val) {
+      return self.overrideKey(req, 'apos.' + module.__meta.name + '.' + key, val);
     };
     
     self.overrideKey = function(req, key, val) {
@@ -72,7 +76,7 @@ module.exports = {
         req.aposOptions[name][primary] = _.cloneDeepWith(req.aposOptions[module.__meta.name][primary], cloneCustom);
         req.aposOptions[name].__clonedPrimaries[primary] = true;
       }
-      _.set(req.aposOptions[module.__meta.name], path.slice(2), val);        
+      _.set(req.aposOptions[name], path.slice(2), val);  
     };
     
     // Apply option overrides based on a particular document's

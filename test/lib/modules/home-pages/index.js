@@ -5,6 +5,11 @@ module.exports = {
     fixed: {
       'apos.analytics-button-widgets.eventId': 'from-home',
       'apos.analytics-button-widgets.flavor.mouthfeel': 'bitter'
+    },
+    localized: {
+      en: {
+        'apos.analytics-button-widgets.flavor.mouthfeel': 'bitter-en'
+      }
     }
   }
 };
