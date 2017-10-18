@@ -20,5 +20,15 @@
   "bugs": {
     "url": "https://github.com/punkave/apostrophe-option-overrides/issues"
   },
-  "homepage": "https://github.com/punkave/apostrophe-option-overrides#readme"
+  "homepage": "https://github.com/punkave/apostrophe-option-overrides#readme",
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "async": "^2.5.0",
+    "request": "^2.83.0",
+    "apostrophe": "^2.26.1",
+    "mocha": "^3.4.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
 }

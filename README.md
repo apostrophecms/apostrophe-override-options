@@ -82,6 +82,12 @@ Due to the middleware-based loading process for the `global` doc, `getOption` me
 
 *TODO:* it may be possible to address this by further modifying `deferWidgetLoading` to defer the global doc to `pageBeforeSend` as well, which is invoked even if a page is being rendered via `sendPage`. This would need to be a new optional setting as developers invoking `renderPage` directly would not get widget loads this way.
 
-## Options that cannot be overridden
+## limitations
+
+### Options that cannot be overridden
 
 Technically, `apos` itself is an option passed to each module. You cannot override properties of this object via the above syntax; an error will be reported. If Apostrophe allowed this the performance impact of deeply cloning the object to allow it to differ for each request would be prohibitive. Similarly you should avoid overriding properties of other large objects. Options that are configured in your modules using simple JSON-friendly data structures are much better candidates.
+
+### Option cloning and supported data types
+
+If at least one module alters an option via `overrideOptions` at any depth, all subproperties found beneath the same top-level key within the options for the module in question are recursively cloned. The performance impact is small if this module is only used to adjust simple "JSON-friendly" option data structures, and Date objects and functions are still included among the cloned properties. However, be aware of the [limitations of the Lodash cloneWith and cloneDeepWith functions](https://lodash.com/docs/4.17.4#cloneWith) (note that cloning functions is explicitly worked around in this module).
