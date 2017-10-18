@@ -1,0 +1,24 @@
+{
+  "name": "apostrophe-option-overrides",
+  "version": "2.0.0",
+  "description": "Override Apostrophe's getOption method based on the current page type, page settings, etc.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/punkave/apostrophe-option-overrides.git"
+  },
+  "keywords": [
+    "apostrophecms",
+    "apostrophe",
+    "cms"
+  ],
+  "author": "P'unk Avenue LLC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/punkave/apostrophe-option-overrides/issues"
+  },
+  "homepage": "https://github.com/punkave/apostrophe-option-overrides#readme"
+}
