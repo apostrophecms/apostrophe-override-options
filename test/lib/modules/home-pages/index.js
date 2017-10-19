@@ -9,7 +9,11 @@ module.exports = {
     localized: {
       en: {
         'apos.analytics-button-widgets.flavor.mouthfeel': 'bitter-en'
-      }
+      },
+      default: {
+        'apos.analytics-button-widgets.flavor.mouthfeel': 'bitter-default',
+        'apos.analytics-button-widgets.flavor.authenticity': 'authentic-default'
+      },
     }
   }
 };

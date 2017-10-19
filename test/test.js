@@ -63,7 +63,28 @@ describe('Workflow Core', function() {
         'home-pages': {},
         'apostrophe-option-overrides': {},
         // mock
-        'apostrophe-workflow': {}
+        'apostrophe-workflow': {
+          locales: [
+            {
+              name: 'default',
+              private: true,
+              children: [
+                {
+                  name: 'fr',
+                  label: 'Français'
+                },
+                {
+                  name: 'en',
+                  label: 'English'
+                },
+                {
+                  name: 'it',
+                  label: 'Italian'
+                }
+              ]
+            }
+          ]  
+        }
       },
       afterInit: function(callback) {
         assert(apos.modules['apostrophe-option-overrides']);
@@ -81,13 +102,14 @@ describe('Workflow Core', function() {
       assert(!err);
       assert(response.statusCode < 400);
       assert.equal(apos.testResults.eventId, 'setting-grandkid');
-      assert.equal(apos.testResults.mouthfeel, 'bitter');
-      assert.equal(apos.testResults.sweetness, 'very');
+      // Default locale is in effect
+      assert.equal(apos.testResults.mouthfeel, 'bitter-default');
+      assert.equal(apos.testResults.sweetness, 'very-default');
       done();
     });
   });
 
-  it('should see the impact of localized options', function(done) {
+  it('should see the impact of localized options for en', function(done) {
     // This URL is designed to work specifically with the mock workflow module provided
     request('http://localhost:7900/tab/grandkid?locale=en', function(err, response, body) {
       assert(!err);
@@ -95,6 +117,7 @@ describe('Workflow Core', function() {
       assert.equal(apos.testResults.eventId, 'setting-grandkid');
       assert.equal(apos.testResults.mouthfeel, 'bitter-en');
       assert.equal(apos.testResults.sweetness, 'very-en');
+      assert.equal(apos.testResults.incredible, true);
       done();
     });
   });

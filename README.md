@@ -10,6 +10,8 @@ In addition, if the `apostrophe-workflow` module is present, settings based on p
 ## Override syntax
 
 ```javascript
+// in lib/modules/landing-pages
+
 module.exports = {
   name: 'landing-page',
   extend: 'apostrophe-custom-pages',
@@ -26,6 +28,7 @@ module.exports = {
       // Note must begin with `apos.module-name` or `apos.moduleAlias`
       'apos.analytics-button-widgets.style': 'blue',
     },
+    // only if `apostrophe-workflow` is present
     localized: {
       // Locales per `apostrophe-workflow` which must be in use
       'en': {
@@ -45,6 +48,52 @@ The above code in the `landing-pages` module overrides what `getOption('style')`
 The same technique may be used in a module that extends the `apostrophe-pieces` module, in which case it applies when the piece is being displayed on its own `show` page.
 
 The technique may also be used in configuration of the `apostrophe-global` module, in which case it is most common to use the `editable` subproperty to make certain options of various modules overridable via the "global" admin bar item.
+
+## Appending and removing elements from arrays
+
+This special syntax can be used to add and remove array elements from options:
+
+```javascript
+  // completely replaces the setting with a new array of one item
+  'apos.analytics-button-widgets.eventIds': [ 'that-is-all' ]
+  // appends to an array, which must already exist
+  'apos.analytics-button-widgets.eventIds': { $append: [ 'at-the-end' ] }
+  // prepends to an array, which must already exist
+  'apos.analytics-button-widgets.eventIds': { $prepend: [ 'at-the-start' ] }
+  // removes from an array, which must already be an array.
+  // It is OK if the values removed are already gone
+  'apos.analytics-button-widgets.eventIds': { $remove: [ 'this-one-goes-away' ] }
+  // appends only if value not already present
+  'apos.analytics-button-widgets.eventIds': { $appendOnce: [ 'last-if-missing' ] }
+  // prepends only if value not already present
+  'apos.analytics-button-widgets.eventIds': { $prependOnce: [ 'first-if-missing' ] }
+```
+
+## Localization of default options
+
+This module also adds the ability to localize module-level default options directly in each module, when the `apostrophe-workflow` module is also present. This is a convenience that avoids the need to add a great number of `localized` overrides in `apostrophe-global`. The syntax is slightly different because the properties being modified belong to the same module.
+
+```javascript
+// in lib/modules/analytics-button-widgets/index.js
+
+module.exports = {
+  extend: 'apostrophe-widgets',
+  name: 'analytics-button',
+  label: 'Analytics Button',
+
+  flavor: {
+    mouthfeel: 'tangy',
+    sweetness: 'very'
+  },
+  localized: {
+    en: {
+      'flavor.sweetness': 'very-en'
+    }
+  }
+};
+```
+
+Note however that dot notation is still used for nested keys.
 
 ## Inexact URL matches and the `show` pages of pieces
 

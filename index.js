@@ -9,6 +9,10 @@ module.exports = {
 
   construct: function(self, options) {
     
+    self.modulesReady = function() {
+      self.compileLocaleTree();
+    },
+
     // Populates `req.aposOptions` with a version of
     // the options object for each module that has been
     // overridden by settings related to the current page,
@@ -29,8 +33,10 @@ module.exports = {
         req.aposOptions[name].__clonedPrimaries = {};
         if (workflow) {
           var locale = workflow.liveify(req.locale);
-          _.each((module.options.localized  && module.options.localized[locale]) || {}, function(val, key) {
-            self.overrideLocalKey(req, module, key, val);
+          _.each(self.localeAncestors[locale] || [], function(locale) {
+            _.each((module.options.localized && module.options.localized[locale]) || {}, function(val, key) {
+              self.overrideLocalKey(req, module, key, val);
+            });
           });
         }
       });
@@ -100,12 +106,18 @@ module.exports = {
       var localized = overrideOptions.localized;
       var editable = overrideOptions.editable;
       var workflow = self.apos.modules['apostrophe-workflow'];
+      var locale;
       _.each(fixed || {}, function(val, key) {
         self.overrideKey(req, key, val);
       });
-      if (workflow) {
-        _.each((localized && localized[workflow.liveify(req.locale)]) || {}, function(val, key) {
-          self.overrideKey(req, key, val);
+      if (workflow && localized) {
+        locale = workflow.liveify(req.locale);
+        _.each(self.localeAncestors[locale] || [], function(locale) {
+          if (localized) {
+            _.each((localized[locale]) || {}, function(val, key) {
+              self.overrideKey(req, key, val);
+            });
+          }
         });
       }
       _.each(editable || {}, function(field, key) {
@@ -114,6 +126,25 @@ module.exports = {
           self.overrideKey(req, key, val);
         }
       });
+    };
+    
+    self.compileLocaleTree = function() {
+      var workflow = self.apos.modules['apostrophe-workflow'];
+      if (!workflow) {
+        return;
+      }
+      var locales = workflow.options.locales;
+      self.localeAncestors = {};
+      exploreLocales(locales, []);
+
+      function exploreLocales(locales, ancestors) {
+        _.each(locales, function(locale) {
+          self.localeAncestors[locale.name] = ancestors.concat([ locale.name ]);
+          if (locale.children) {
+            exploreLocales(locale.children, ancestors.concat([ locale.name ]));
+          }
+        });
+      }
     };
     
     // Make sure cloned options still include functions.
