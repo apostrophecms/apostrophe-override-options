@@ -82,7 +82,37 @@ module.exports = {
         req.aposOptions[name][primary] = _.cloneDeepWith(req.aposOptions[module.__meta.name][primary], cloneCustom);
         req.aposOptions[name].__clonedPrimaries[primary] = true;
       }
-      _.set(req.aposOptions[name], path.slice(2), val);  
+      var array;
+      var added;
+
+      if (val && (typeof(val) === 'object')) {
+        if (val.$append) {
+          array = _.get(req.aposOptions[name], path.slice(2)) || [];
+          _.set(req.aposOptions[name], path.slice(2), array.concat(val.$append));
+        } else if (val.$prepend) {
+          array = _.get(req.aposOptions[name], path.slice(2)) || [];
+          _.set(req.aposOptions[name], path.slice(2), val.$prepend.concat(array));
+        } else if (val.$appendUnique) {
+          array = _.get(req.aposOptions[name], path.slice(2)) || [];
+          added = _.differenceWith(val.$appendUnique, array, _.isEqual);
+          _.set(req.aposOptions[name], path.slice(2), array.concat(added));
+        } else if (val.$prependUnique) {
+          array = _.get(req.aposOptions[name], path.slice(2)) || [];
+          added = _.differenceWith(val.$prependUnique, array, _.isEqual);
+          _.set(req.aposOptions[name], path.slice(2), added.concat(array || []));
+        } else if (val.$remove) {
+          array = _.get(req.aposOptions[name], path.slice(2));
+          array = _.differenceWith(array, val.$remove, _.isEqual);
+          _.set(req.aposOptions[name], path.slice(2), array);
+        } else if (val.$assign) {
+          // As an escape mechanism
+          _.set(req.aposOptions[name], path.slice(2), val.$assign);  
+        } else {
+          _.set(req.aposOptions[name], path.slice(2), val);  
+        }
+      } else {
+        _.set(req.aposOptions[name], path.slice(2), val);  
+      }
     };
     
     // Apply option overrides based on a particular document's
@@ -121,8 +151,33 @@ module.exports = {
         });
       }
       _.each(editable || {}, function(field, key) {
-        var val = doc[field];
-        if (val || (val !== '0')) {
+        var verb;
+        var object;
+        if (typeof(field) === 'object') {
+          // It's a command like $append. Build an
+          // object like { $append: [ 5 ] } from an
+          // object like { $append: 'fieldname' }.
+          // If the field is empty treat it as
+          // appending nothing. This code looks weird
+          // because I'm avoiding hardcoding this for
+          // every verb.
+          verb = _.keys(field)[0];
+          field = _.values(field)[0];
+          val = doc[field];
+          if (!Array.isArray(val)) {
+            if (val || (val === 0)) {
+              val = [ val ];
+            } else {
+              val = [];
+            }
+          }
+          object = {};
+          object[verb] = val;
+          val = object;
+        } else {
+          val = doc[field];
+        }
+        if (val || (val === 0)) {
           self.overrideKey(req, key, val);
         }
       });

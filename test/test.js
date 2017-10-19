@@ -41,6 +41,7 @@ describe('Workflow Core', function() {
                   title: 'Grandkid',
                   type: 'default',
                   analyticsEventId: 'setting-grandkid',
+                  extraChannelId: 12,
                   slug: '/tab/grandkid',
                   published: true
                 }
@@ -102,6 +103,13 @@ describe('Workflow Core', function() {
       assert(!err);
       assert(response.statusCode < 400);
       assert.equal(apos.testResults.eventId, 'setting-grandkid');
+      // Tests of the array operators like $prepend, see modules
+      assert.deepEqual(apos.testResults.channelIds, [ 3, 5, 5, 7, 9 ]);
+      assert.deepEqual(apos.testResults.channelIds2, [ 3, 5, 7, 9 ]);
+      assert.deepEqual(apos.testResults.channelIds3, [ 5, 7, 9, 3, 5 ]);
+      assert.deepEqual(apos.testResults.channelIds4, [ 7, 9, 3, 5 ]);
+      assert.deepEqual(apos.testResults.channelIds5, [ 3 ]);
+      assert.deepEqual(apos.testResults.channelIds6, [ 3, 5, 12 ]);
       // Default locale is in effect
       assert.equal(apos.testResults.mouthfeel, 'bitter-default');
       assert.equal(apos.testResults.sweetness, 'very-default');

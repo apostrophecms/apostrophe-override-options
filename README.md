@@ -69,6 +69,12 @@ This special syntax can be used to add and remove array elements from options:
   'apos.analytics-button-widgets.eventIds': { $prependOnce: [ 'first-if-missing' ] }
 ```
 
+### Editable fields and `$append`, etc.
+
+For `editable`, specify the field name as the value, i.e. `{ $append: 'fieldname' }`.
+
+This does what you probably had in mind. If the field does not contain an array, it is treated as an array of one element as long as it is truthy or the *number* `0`. Otherwise it is treated as an empty array. So an empty field of type `string` does not change the array; a field with text appends that one value.
+
 ## Localization of default options
 
 This module also adds the ability to localize module-level default options directly in each module, when the `apostrophe-workflow` module is also present. This is a convenience that avoids the need to add a great number of `localized` overrides in `apostrophe-global`. The syntax is slightly different because the properties being modified belong to the same module.
