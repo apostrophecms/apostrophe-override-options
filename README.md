@@ -101,6 +101,12 @@ module.exports = {
 
 Note however that dot notation is still used for nested keys.
 
+### Disabling page types based on the locale
+
+This feature allows the disabling of page types based on the current locale, in conjunction with the `disabledTypes` option of the `apostrophe-pages` module. Just use `localized` as shown above to set `disabledTypes` to an array of types that should not be available in a given locale when creating new pages or changing the page type.
+
+Note that while `localized` works here, option overrides that are dependent on the position within the page tree do not. This is because pages may appear at any point in the tree and it would be a false claim to try to restrict their schemas based on where they are "born" in the site.
+
 ## Inexact URL matches and the `show` pages of pieces
 
 In a best effort to take URLs that contain additional components beyond the slug of the page into account, this module honors `req.data.bestPage` if `req.data.page` is not yet set.
@@ -137,7 +143,7 @@ Due to the middleware-based loading process for the `global` doc, `getOption` me
 
 *TODO:* it may be possible to address this by further modifying `deferWidgetLoading` to defer the global doc to `pageBeforeSend` as well, which is invoked even if a page is being rendered via `sendPage`. This would need to be a new optional setting as developers invoking `renderPage` directly would not get widget loads this way.
 
-## limitations
+## Limitations
 
 ### Options that cannot be overridden
 
