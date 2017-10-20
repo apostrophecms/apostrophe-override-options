@@ -14,7 +14,7 @@ In addition, if the `apostrophe-workflow` module is present, settings based on p
 
 modules: {
   // Enable the feature
-  'apostrophe-option-overrides': {}
+  'apostrophe-override-options': {}
 }
 
 // in lib/modules/landing-pages

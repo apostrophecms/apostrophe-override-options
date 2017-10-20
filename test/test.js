@@ -12,9 +12,9 @@ describe('Workflow Core', function() {
 
   this.timeout(5000);
 
-  after(function() {
-    apos.db.dropDatabase();
-  });
+  // after(function() {
+  //   apos.db.dropDatabase();
+  // });
 
   //////
   // EXISTENCE
@@ -46,6 +46,12 @@ describe('Workflow Core', function() {
                   published: true
                 }
               ]
+            },
+            {
+              title: 'Products',
+              type: 'products-page',
+              slug: '/products',
+              published: true
             }
           ],
           types: [
@@ -56,13 +62,28 @@ describe('Workflow Core', function() {
             {
               name: 'default',
               label: 'Default'
+            },
+            {
+              name: 'products',
+              label: 'Products'
             }
           ]
         },
         'analytics-button-widgets': {},
         'default-pages': {},
         'home-pages': {},
-        'apostrophe-option-overrides': {},
+        'products': {
+          overrideOptions: {
+            fixed: {
+              'apos.analytics-button-widgets.eventId': 'product-fixed-event-id',
+            },
+            editable: {
+              'apos.analytics-button-widgets.eventId2': 'analyticsEventId',
+            }
+          }
+        },
+        'products-pages': {},
+        'apostrophe-override-options': {},
         // mock
         'apostrophe-workflow': {
           locales: [
@@ -88,7 +109,7 @@ describe('Workflow Core', function() {
         }
       },
       afterInit: function(callback) {
-        assert(apos.modules['apostrophe-option-overrides']);
+        assert(apos.modules['apostrophe-override-options']);
         return callback(null);
       },
       afterListen: function(err) {
@@ -126,6 +147,29 @@ describe('Workflow Core', function() {
       assert.equal(apos.testResults.mouthfeel, 'bitter-en');
       assert.equal(apos.testResults.sweetness, 'very-en');
       assert.equal(apos.testResults.incredible, true);
+      done();
+    });
+  });
+  
+  it('insert a test piece', function(done) {
+    var piece = apos.modules.products.newInstance();
+    _.assign(piece, {
+      title: 'gadget',
+      analyticsEventId: 'edited'
+    });
+    apos.modules.products.insert(apos.tasks.getReq(), piece, function(err) {
+      assert(!err);
+      done();
+    });
+  });
+
+  it('should see the impact of widget option overrides at the piece show page level', function(done) {
+    // This URL is designed to work specifically with the mock workflow module provided
+    request('http://localhost:7900/products/gadget', function(err, response, body) {
+      assert(!err);
+      assert(response.statusCode < 400);
+      assert.equal(apos.testResults.eventId, 'product-fixed-event-id');
+      assert.equal(apos.testResults.eventId2, 'edited');
       done();
     });
   });

@@ -32,6 +32,7 @@ module.exports = {
     self.pageBeforeSend = function(req) {
       try {
         self.apos.testResults.eventId = self.getOption(req, 'eventId', 'default');
+        self.apos.testResults.eventId2 = self.getOption(req, 'eventId2', 'default');
         self.apos.testResults.channelIds = self.getOption(req, 'channelIds', []);
         self.apos.testResults.channelIds2 = self.getOption(req, 'channelIds2', []);
         self.apos.testResults.channelIds3 = self.getOption(req, 'channelIds3', []);

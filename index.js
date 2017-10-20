@@ -3,7 +3,7 @@ var _ = require('lodash');
 module.exports = {
 
   moogBundle: {
-    modules: [ 'apostrophe-option-overrides-module', 'apostrophe-option-overrides-pages', 'apostrophe-option-overrides-doc-type-manager' ],
+    modules: [ 'apostrophe-override-options-module', 'apostrophe-override-options-pages', 'apostrophe-override-options-doc-type-manager', 'apostrophe-override-options-pieces-pages' ],
     directory: 'lib/modules'
   },
 

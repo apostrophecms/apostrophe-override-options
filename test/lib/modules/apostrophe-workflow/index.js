@@ -1,5 +1,5 @@
 // Mock apostrophe-workflow module just for the tests.
-// apostrophe-option-overrides tests for its existence
+// apostrophe-override-options tests for its existence
 
 module.exports = {
   construct: function(self, options) {
