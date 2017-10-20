@@ -10,6 +10,13 @@ In addition, if the `apostrophe-workflow` module is present, settings based on p
 ## Override syntax
 
 ```javascript
+// in app.js
+
+modules: {
+  // Enable the feature
+  'apostrophe-option-overrides': {}
+}
+
 // in lib/modules/landing-pages
 
 module.exports = {
