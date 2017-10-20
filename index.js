@@ -3,7 +3,7 @@ var _ = require('lodash');
 module.exports = {
 
   moogBundle: {
-    modules: [ 'apostrophe-option-overrides-module', 'apostrophe-option-overrides-pages' ],
+    modules: [ 'apostrophe-option-overrides-module', 'apostrophe-option-overrides-pages', 'apostrophe-option-overrides-doc-type-manager' ],
     directory: 'lib/modules'
   },
 
@@ -16,8 +16,12 @@ module.exports = {
     // Populates `req.aposOptions` with a version of
     // the options object for each module that has been
     // overridden by settings related to the current page,
-    // per the documentation of this module. Invoked by
-    // an override of `apos.pages.pageServe`
+    // per the documentation of this module. Invoked
+    // as soon as possible by an override of
+    // `apos.pages.serveLoaders` and also in certain
+    // other contexts such as routes relating to the
+    // editing of page settings.
+    
     self.calculateOverrides = function(req) {
 
       req.aposOptions = {};
