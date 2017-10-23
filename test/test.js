@@ -76,6 +76,9 @@ describe('Workflow Core', function() {
           overrideOptions: {
             fixed: {
               'apos.analytics-button-widgets.eventId': 'product-fixed-event-id',
+              'apos.analytics-button-widgets.eventId3': function(req, options, path, val) {
+                return req.data.piece ? req.data.piece._id : val;
+              },
             },
             editable: {
               'apos.analytics-button-widgets.eventId2': 'analyticsEventId',
@@ -170,6 +173,8 @@ describe('Workflow Core', function() {
       assert(response.statusCode < 400);
       assert.equal(apos.testResults.eventId, 'product-fixed-event-id');
       assert.equal(apos.testResults.eventId2, 'edited');
+      // should be an apostrophe id
+      assert(apos.testResults.eventId3.match(/^c/));
       done();
     });
   });

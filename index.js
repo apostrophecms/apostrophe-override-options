@@ -87,35 +87,42 @@ module.exports = {
         req.aposOptions[name].__clonedPrimaries[primary] = true;
       }
       var array;
+      var sliced;
       var added;
+      var moduleOptions = req.aposOptions[name];
+      var sliced = path.slice(2);
 
       if (val && (typeof(val) === 'object')) {
         if (val.$append) {
-          array = _.get(req.aposOptions[name], path.slice(2)) || [];
-          _.set(req.aposOptions[name], path.slice(2), array.concat(val.$append));
+          array = _.get(moduleOptions, sliced) || [];
+          _.set(moduleOptions, sliced, array.concat(val.$append));
         } else if (val.$prepend) {
-          array = _.get(req.aposOptions[name], path.slice(2)) || [];
-          _.set(req.aposOptions[name], path.slice(2), val.$prepend.concat(array));
+          array = _.get(moduleOptions, sliced) || [];
+          _.set(moduleOptions, sliced, val.$prepend.concat(array));
         } else if (val.$appendUnique) {
-          array = _.get(req.aposOptions[name], path.slice(2)) || [];
+          array = _.get(moduleOptions, sliced) || [];
           added = _.differenceWith(val.$appendUnique, array, _.isEqual);
-          _.set(req.aposOptions[name], path.slice(2), array.concat(added));
+          _.set(moduleOptions, sliced, array.concat(added));
         } else if (val.$prependUnique) {
-          array = _.get(req.aposOptions[name], path.slice(2)) || [];
+          array = _.get(moduleOptions, sliced) || [];
           added = _.differenceWith(val.$prependUnique, array, _.isEqual);
-          _.set(req.aposOptions[name], path.slice(2), added.concat(array || []));
+          _.set(moduleOptions, sliced, added.concat(array || []));
         } else if (val.$remove) {
-          array = _.get(req.aposOptions[name], path.slice(2));
+          array = _.get(moduleOptions, sliced);
           array = _.differenceWith(array, val.$remove, _.isEqual);
-          _.set(req.aposOptions[name], path.slice(2), array);
+          _.set(moduleOptions, sliced, array);
         } else if (val.$assign) {
           // As an escape mechanism
-          _.set(req.aposOptions[name], path.slice(2), val.$assign);  
+          _.set(moduleOptions, sliced, val.$assign);  
         } else {
-          _.set(req.aposOptions[name], path.slice(2), val);  
+          _.set(moduleOptions, sliced, val);  
         }
+      } else if (val && (typeof(val) === 'function')) {
+        _.set(moduleOptions, sliced,
+          val(req, moduleOptions, sliced, _.get(moduleOptions, sliced))
+        );
       } else {
-        _.set(req.aposOptions[name], path.slice(2), val);  
+        _.set(moduleOptions, sliced, val);  
       }
     };
     
