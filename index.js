@@ -87,7 +87,6 @@ module.exports = {
         req.aposOptions[name].__clonedPrimaries[primary] = true;
       }
       var array;
-      var sliced;
       var added;
       var moduleOptions = req.aposOptions[name];
       var sliced = path.slice(2);
