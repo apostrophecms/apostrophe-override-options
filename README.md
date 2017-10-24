@@ -71,9 +71,9 @@ This special syntax can be used to add and remove array elements from options:
   // It is OK if the values removed are already gone
   'apos.analytics-button-widgets.eventIds': { $remove: [ 'this-one-goes-away' ] }
   // appends only if value not already present
-  'apos.analytics-button-widgets.eventIds': { $appendOnce: [ 'last-if-missing' ] }
+  'apos.analytics-button-widgets.eventIds': { $appendUnique: [ 'last-if-missing' ] }
   // prepends only if value not already present
-  'apos.analytics-button-widgets.eventIds': { $prependOnce: [ 'first-if-missing' ] }
+  'apos.analytics-button-widgets.eventIds': { $prependUnique: [ 'first-if-missing' ] }
 ```
 
 ### Editable fields and `$append`, etc.
