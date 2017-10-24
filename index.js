@@ -23,7 +23,6 @@ module.exports = {
     // editing of page settings.
     
     self.calculateOverrides = function(req) {
-
       req.aposOptions = {};
       var workflow = self.apos.modules['apostrophe-workflow'];
 
@@ -46,7 +45,8 @@ module.exports = {
       });
 
       self.applyOverridesFromDoc(req, req.data.global || {});
-      var ancestors = (req.data.bestPage && req.data.bestPage._ancestors) || [];
+      // clone so we are not modifying bestPage._ancestors
+      var ancestors = _.clone((req.data.bestPage && req.data.bestPage._ancestors) || []);
       if (req.data.bestPage) {
         ancestors.push(req.data.bestPage);
       }
