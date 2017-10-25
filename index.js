@@ -67,8 +67,8 @@ module.exports = {
       }
       var module = self.apos.modules[path[1]];
       if (!module) {
-        module = apos[path[1]];
-        if (module.alias !== path[1]) {
+        module = self.apos[path[1]];
+        if (!module || module.alias !== path[1]) {
           // Something sneaky is going on
           return callback(new Error('Key for fixed override must start with apos. and an instantiated existing module name or alias'));
         }
