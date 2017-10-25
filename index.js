@@ -8,7 +8,7 @@ module.exports = {
   },
 
   construct: function(self, options) {
-    
+
     self.modulesReady = function() {
       self.compileLocaleTree();
     },
@@ -21,7 +21,7 @@ module.exports = {
     // `apos.pages.serveLoaders` and also in certain
     // other contexts such as routes relating to the
     // editing of page settings.
-    
+
     self.calculateOverrides = function(req) {
       req.aposOptions = {};
       var workflow = self.apos.modules['apostrophe-workflow'];
@@ -58,28 +58,28 @@ module.exports = {
     self.overrideLocalKey = function(req, module, key, val) {
       return self.overrideKey(req, 'apos.' + module.__meta.name + '.' + key, val);
     };
-    
+
     self.overrideKey = function(req, key, val) {
       var path = key.split(/\./);
       var primary;
       if (path[0] !== 'apos') {
-        return callback(new Error('Key for fixed override must start with apos. and an instantiated module name or alias'));
+        return new Error('Key for fixed override must start with apos. and an instantiated module name or alias');
       }
       var module = self.apos.modules[path[1]];
       if (!module) {
-        module = apos[path[1]];
-        if (module.alias !== path[1]) {
+        module = self.apos[path[1]];
+        if (!module || module.alias !== path[1]) {
           // Something sneaky is going on
-          return callback(new Error('Key for fixed override must start with apos. and an instantiated existing module name or alias'));
+          return new Error('Key for fixed override must start with apos. and an instantiated existing module name or alias');
         }
       }
       if (!module) {
-        return callback(new Error('Key for fixed override must start with apos. and an instantiated module name or alias'));
+        return new Error('Key for fixed override must start with apos. and an instantiated module name or alias');
       }
       primary = path[2];
       if (primary === 'apos') {
         // Cloning it deeply would be prohibitively expensive
-        return callback(new Error('Option overrides may not alter the apos object passed to a module'));
+        return new Error('Option overrides may not alter the apos object passed to a module');
       }
       var name = module.__meta.name;
       if (!req.aposOptions[name].__clonedPrimaries[primary]) {
@@ -112,24 +112,24 @@ module.exports = {
           _.set(moduleOptions, sliced, array);
         } else if (val.$assign) {
           // As an escape mechanism
-          _.set(moduleOptions, sliced, val.$assign);  
+          _.set(moduleOptions, sliced, val.$assign);
         } else {
-          _.set(moduleOptions, sliced, val);  
+          _.set(moduleOptions, sliced, val);
         }
       } else if (val && (typeof(val) === 'function')) {
         _.set(moduleOptions, sliced,
           val(req, moduleOptions, sliced, _.get(moduleOptions, sliced))
         );
       } else {
-        _.set(moduleOptions, sliced, val);  
+        _.set(moduleOptions, sliced, val);
       }
     };
-    
+
     // Apply option overrides based on a particular document's
     // type and settings, per the `overrideOptions` configuration
     // of its manager module or, if provided, the module passed
     // as `optionsSource`.
-    
+
     self.applyOverridesFromDoc = function(req, doc, optionsSource) {
       var manager;
       if (!optionsSource) {
@@ -192,7 +192,7 @@ module.exports = {
         }
       });
     };
-    
+
     self.compileLocaleTree = function() {
       var workflow = self.apos.modules['apostrophe-workflow'];
       if (!workflow) {
@@ -211,7 +211,7 @@ module.exports = {
         });
       }
     };
-    
+
     // Make sure cloned options still include functions.
     // _.clone handles most other types well.
 
