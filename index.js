@@ -63,23 +63,23 @@ module.exports = {
       var path = key.split(/\./);
       var primary;
       if (path[0] !== 'apos') {
-        return callback(new Error('Key for fixed override must start with apos. and an instantiated module name or alias'));
+        return new Error('Key for fixed override must start with apos. and an instantiated module name or alias');
       }
       var module = self.apos.modules[path[1]];
       if (!module) {
-        module = apos[path[1]];
-        if (module.alias !== path[1]) {
+        module = self.apos[path[1]];
+        if (!module || module.alias !== path[1]) {
           // Something sneaky is going on
-          return callback(new Error('Key for fixed override must start with apos. and an instantiated existing module name or alias'));
+          return new Error('Key for fixed override must start with apos. and an instantiated existing module name or alias');
         }
       }
       if (!module) {
-        return callback(new Error('Key for fixed override must start with apos. and an instantiated module name or alias'));
+        return new Error('Key for fixed override must start with apos. and an instantiated module name or alias');
       }
       primary = path[2];
       if (primary === 'apos') {
         // Cloning it deeply would be prohibitively expensive
-        return callback(new Error('Option overrides may not alter the apos object passed to a module'));
+        return new Error('Option overrides may not alter the apos object passed to a module');
       }
       var name = module.__meta.name;
       if (!req.aposOptions[name].__clonedPrimaries[primary]) {
