@@ -175,6 +175,8 @@ describe('Workflow Core', function() {
       assert.equal(apos.testResults.eventId2, 'edited');
       // should be an apostrophe id
       assert(apos.testResults.eventId3.match(/^c/));
+      // sould be in the body response
+      assert(body.match(/^c/));
       done();
     });
   });
