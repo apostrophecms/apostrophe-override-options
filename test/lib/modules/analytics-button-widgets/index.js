@@ -6,10 +6,16 @@ module.exports = {
     {
       type: 'string',
       name: 'label'
+    },
+    {
+      type: 'string',
+      name: 'eventId4',
+      label: 'Event ID'
     }
   ],
   eventId: 'module-default',
   eventId3: 'module-default',
+  eventId4: 'module-default',
   channelIds: [ 3, 5 ],
   channelIds2: [ 3, 5 ],
   channelIds3: [ 3, 5 ],
@@ -27,6 +33,11 @@ module.exports = {
     default: {
       'flavor.sweetness': 'very-default',
       'flavor.incredible': true
+    }
+  },
+  overrideOptions: {
+    editable: {
+      'eventId4': 'eventId4'
     }
   },
   construct: function(self, options) {

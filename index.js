@@ -3,7 +3,13 @@ var _ = require('lodash');
 module.exports = {
 
   moogBundle: {
-    modules: [ 'apostrophe-override-options-module', 'apostrophe-override-options-pages', 'apostrophe-override-options-doc-type-manager', 'apostrophe-override-options-pieces-pages' ],
+    modules: [
+      'apostrophe-override-options-module',
+      'apostrophe-override-options-pages',
+      'apostrophe-override-options-doc-type-manager',
+      'apostrophe-override-options-pieces-pages',
+      'apostrophe-override-options-widgets'
+    ],
     directory: 'lib/modules'
   },
 
@@ -38,7 +44,7 @@ module.exports = {
           var locale = workflow.liveify(req.locale);
           _.each(self.localeAncestors[locale] || [], function(locale) {
             _.each((module.options.localized && module.options.localized[locale]) || {}, function(val, key) {
-              self.overrideLocalKey(req, module, key, val);
+              self.overrideKey(req, module, key, val);
             });
           });
         }
@@ -55,32 +61,21 @@ module.exports = {
       });
     };
 
-    self.overrideLocalKey = function(req, module, key, val) {
-      return self.overrideKey(req, 'apos.' + module.__meta.name + '.' + key, val);
-    };
-
-    self.overrideKey = function(req, key, val) {
+    self.overrideKey = function(req, module, key, val) {
       var path = key.split(/\./);
       var primary;
-      if (path[0] !== 'apos') {
-        return new Error('Key for fixed override must start with apos. and an instantiated module name or alias');
-      }
-      var module = self.apos.modules[path[1]];
-      if (!module) {
-        module = self.apos[path[1]];
-        if (!module || module.alias !== path[1]) {
-          // Something sneaky is going on
-          return new Error('Key for fixed override must start with apos. and an instantiated existing module name or alias');
+      if (path[0] === 'apos') {
+        module = self.apos.modules[path[1]];
+        if (!module) {
+          module = self.apos[path[1]];
         }
+        path = path.slice(2);
       }
       if (!module) {
-        return new Error('Key for fixed override must start with apos. and an instantiated module name or alias');
+        // Something sneaky is going on
+        return new Error('If it is not local to the current module, the key for a fixed override must start with apos. and an instantiated existing module name or alias');
       }
-      primary = path[2];
-      if (primary === 'apos') {
-        // Cloning it deeply would be prohibitively expensive
-        return new Error('Option overrides may not alter the apos object passed to a module');
-      }
+      primary = path[0];
       var name = module.__meta.name;
       if (!req.aposOptions[name].__clonedPrimaries[primary]) {
         req.aposOptions[name][primary] = _.cloneDeepWith(req.aposOptions[module.__meta.name][primary], cloneCustom);
@@ -89,40 +84,81 @@ module.exports = {
       var array;
       var added;
       var moduleOptions = req.aposOptions[name];
-      var sliced = path.slice(2);
 
+      _.set(moduleOptions, path, self.getNewOptionValue(req, moduleOptions, path, val));
+    };
+
+    // Given a `moduleOptions` object in which existing values can be found,
+    // a path `sliced` *within* that object (which may be a dot path or an array),
+    // and an intended value `val` (which may be an object containing any of the
+    // documented operators for this module such as ``$append`), return the
+    // new value that is appropriate for `path`.
+    
+    self.getNewOptionValue = function(req, moduleOptions, sliced, val) {
       if (val && (typeof(val) === 'object')) {
         if (val.$append) {
           array = _.get(moduleOptions, sliced) || [];
-          _.set(moduleOptions, sliced, array.concat(val.$append));
+          return array.concat(val.$append);
         } else if (val.$prepend) {
           array = _.get(moduleOptions, sliced) || [];
-          _.set(moduleOptions, sliced, val.$prepend.concat(array));
+          return val.$prepend.concat(array);
         } else if (val.$appendUnique) {
           array = _.get(moduleOptions, sliced) || [];
           added = _.differenceWith(val.$appendUnique, array, _.isEqual);
-          _.set(moduleOptions, sliced, array.concat(added));
+          return array.concat(added);
         } else if (val.$prependUnique) {
           array = _.get(moduleOptions, sliced) || [];
           added = _.differenceWith(val.$prependUnique, array, _.isEqual);
-          _.set(moduleOptions, sliced, added.concat(array || []));
+          return added.concat(array || []);
         } else if (val.$remove) {
           array = _.get(moduleOptions, sliced);
           array = _.differenceWith(array, val.$remove, _.isEqual);
-          _.set(moduleOptions, sliced, array);
+          return array;
         } else if (val.$assign) {
           // As an escape mechanism
-          _.set(moduleOptions, sliced, val.$assign);
+          return val.$assign;
         } else {
-          _.set(moduleOptions, sliced, val);
+          return val;
         }
       } else if (val && (typeof(val) === 'function')) {
-        _.set(moduleOptions, sliced,
-          val(req, moduleOptions, sliced, _.get(moduleOptions, sliced))
-        );
+        return val(req, moduleOptions, sliced, _.get(moduleOptions, sliced));
       } else {
-        _.set(moduleOptions, sliced, val);
+        return val;
+      }      
+    };
+    
+    // Given a doc and a field name, return the field value
+    // suitable for use with `overrideKey`. This method handles
+    // both simple field names like `name` and array modifiers
+    // like `{ $append: 'name' }`, returning objects
+    // like `'Jane'` and `{$ append: 'Jane' }`.
+    self.getEditableFieldValue = function(doc, field) {
+      var val;
+      if (typeof(field) === 'object') {
+        // It's a command like $append. Build an
+        // object like { $append: [ 5 ] } from an
+        // object like { $append: 'fieldname' }.
+        // If the field is empty treat it as
+        // appending nothing. This code looks weird
+        // because I'm avoiding hardcoding this for
+        // every verb.
+        verb = _.keys(field)[0];
+        field = _.values(field)[0];
+        val = doc[field];
+        if (!Array.isArray(val)) {
+          if (val || (val === 0)) {
+            val = [ val ];
+          } else {
+            val = [];
+          }
+        }
+        object = {};
+        object[verb] = val;
+        val = object;
+      } else {
+        val = doc[field];
       }
+      return val;
     };
 
     // Apply option overrides based on a particular document's
@@ -148,47 +184,25 @@ module.exports = {
       var workflow = self.apos.modules['apostrophe-workflow'];
       var locale;
       _.each(fixed || {}, function(val, key) {
-        self.overrideKey(req, key, val);
+        self.overrideKey(req, optionsSource, key, val);
       });
       if (workflow && localized) {
         locale = workflow.liveify(req.locale);
         _.each(self.localeAncestors[locale] || [], function(locale) {
           if (localized) {
             _.each((localized[locale]) || {}, function(val, key) {
-              self.overrideKey(req, key, val);
+              self.overrideKey(req, optionsSource, key, val);
             });
           }
         });
       }
       _.each(editable || {}, function(field, key) {
         var verb;
+        // like `'Jane'` and `{$ append: 'Jane' }`.
         var object;
-        if (typeof(field) === 'object') {
-          // It's a command like $append. Build an
-          // object like { $append: [ 5 ] } from an
-          // object like { $append: 'fieldname' }.
-          // If the field is empty treat it as
-          // appending nothing. This code looks weird
-          // because I'm avoiding hardcoding this for
-          // every verb.
-          verb = _.keys(field)[0];
-          field = _.values(field)[0];
-          val = doc[field];
-          if (!Array.isArray(val)) {
-            if (val || (val === 0)) {
-              val = [ val ];
-            } else {
-              val = [];
-            }
-          }
-          object = {};
-          object[verb] = val;
-          val = object;
-        } else {
-          val = doc[field];
-        }
+        val = self.getEditableFieldValue(doc, field);
         if (val || (val === 0)) {
-          self.overrideKey(req, key, val);
+          self.overrideKey(req, optionsSource, key, val);
         }
       });
     };
