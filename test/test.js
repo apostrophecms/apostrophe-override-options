@@ -4,7 +4,7 @@ var async = require('async');
 var request = require('request');
 var fs = require('fs');
 
-describe('Workflow Core', function() {
+describe('Override Options', function() {
 
   var apos;
 
@@ -35,7 +35,21 @@ describe('Workflow Core', function() {
               type: 'default',
               slug: '/tab',
               published: true,
-              
+              body: {
+                type: 'area',
+                items: [
+                  {
+                    type: 'analytics-button',
+                    // nonempty string SHOULD override
+                    eventId4: 'edited'
+                  },
+                  {
+                    type: 'analytics-button',
+                    // empty string should not override
+                    eventId4: ''
+                  },
+                ]
+              },
               _children: [
                 {
                   title: 'Grandkid',
@@ -175,6 +189,21 @@ describe('Workflow Core', function() {
       assert.equal(apos.testResults.eventId2, 'edited');
       // should be an apostrophe id
       assert(apos.testResults.eventId3.match(/^c/));
+      done();
+    });
+  });
+
+  it('should see the impact of widget level editable overrides', function(done) {
+    request('http://localhost:7900/tab', function(err, response, body) {
+      assert(!err);
+      assert(response.statusCode < 400);
+      var widget1 = body.indexOf('data-analytics-id="edited"');
+      var widget2 = body.indexOf('data-analytics-id="module-default"');
+      assert(widget1 !== -1);
+      assert(widget2 !== -1);
+      assert(widget2 > widget1);
+      var templateLevel = body.indexOf('data-analytics-id-2="from-template"');
+      assert(templateLevel !== -1);
       done();
     });
   });

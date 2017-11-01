@@ -1,11 +1,15 @@
 This module allows configurable overrides of the `getOption` method and Nunjucks helper of Apostrophe modules, based on:
 
+* Editable fields of the widget being rendered, if we're rendering a widget, *or*
+* Template-level options passed to the widget being rendered, if we're rendering a widget, *or*
 * The current piece type or user-editable settings of the piece, when viewing the "show" template (permalink page for that piece), *or*
 * The current page type or user-editable settings of a current page, or those of an ancestor in the page tree, *or*
 * User-editable settings of the `apostrophe-global` module, *or*
 * The options actually configured for the module (this is the default behavior of `getOption`).
 
 In addition, if the `apostrophe-workflow` module is present, settings based on piece types and page types can be localized, and module-level default settings can be localized as well.
+
+The end result is a general-purpose `module.getOption` helper that allows frontend developers to get the right thing easily in a template, and puts the responsibility of deciding what the right thing will be in a given context on the backend developer.
 
 ## Override syntax
 
@@ -56,6 +60,8 @@ The same technique may be used in a module that extends the `apostrophe-pieces` 
 
 The technique may also be used in configuration of the `apostrophe-global` module, in which case it is most common to use the `editable` subproperty to make certain options of various modules overridable via the "global" admin bar item.
 
+> As a convenience, you may choose to skip the `apos.moduleName` part if you are overriding an option of your own module, which is often done via `editable`.
+
 ## Appending and removing elements from arrays
 
 This special syntax can be used to add and remove array elements from options:
@@ -103,6 +109,10 @@ overrideOptions: {
   }
 }
 ```
+
+## Overriding widget options with `editable`
+
+Widget modules can use `editable` too. However they may *only* use `editable`, they may *only* override their own options, and the overrides are only seen by `module.getOption` calls made in `widget.html` or something invoked by it. Since widgets are not full-page experiences it does not make sense for them to override options of other modules.
 
 ## Localization of default options
 
