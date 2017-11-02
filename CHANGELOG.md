@@ -1,3 +1,7 @@
+## 2.1.2
+
+* The mechanism allowing self-overrides via `editable` and template options in widget modules has been completely rewritten to fully leverage the mechanisms used by other overrides. This eliminates a number of bugs relating to arrays and nested options.
+
 ## 2.1.1
 
 * Editing and saving a widget that has `editable` options no longer crashes. Also, be aware that values inherited from other modules are not available when a widget is re-rendered at the time it is saved. However they are available when that widget is rendered later as part of an actual page load. This may be addressed in a future update of Apostrophe.
