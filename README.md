@@ -154,6 +154,10 @@ In a best effort to take URLs that contain additional components beyond the slug
 
 If the original options of a module are modified after `pageServe` time, those changes will not be accessible at all to `getOption` calls made for that particular request when this module is in use. However, since module options are not request-specific, it would almost never make sense to modify them after app launch time.
 
+## Visiblity of option settings when editing widgets
+
+When you are editing a widget and click "save" and it re-renders, options inherited via the page tree are not visible. However when the widget renders later as part of a real visit to a page those options will be visible and will impact rendering as intended. There is a deeper issue in Apostrophe associated with this and it is under discussion.
+
 ## Timing concerns
 
 For performance, this module computes its results just before `pageServe` methods are invoked. At this point, `req.data.bestPage` has been set, and widgets are about to be loaded.

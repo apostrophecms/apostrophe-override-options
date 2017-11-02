@@ -1,3 +1,7 @@
+## 2.1.1
+
+* Editing and saving a widget that has `editable` options no longer crashes. Also, be aware that values inherited from other modules are not available when a widget is re-rendered at the time it is saved. However they are available when that widget is rendered later as part of an actual page load. This may be addressed in a future update of Apostrophe.
+
 ## 2.1.0
 
 * A module may now override its own options (for instance, via `editable`) without the `apos.modulename` prefix.
