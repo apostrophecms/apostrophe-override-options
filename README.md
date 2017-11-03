@@ -82,6 +82,18 @@ This special syntax can be used to add and remove array elements from options:
   'apos.analytics-button-widgets.eventIds': { $prependUnique: [ 'first-if-missing' ] }
 ```
 
+### Customize the `unique` checking
+
+```javascript
+// appends testing unicity with custom function (also working with a string checking property of item)
+'apos.analytics-button-widgets.eventIds': {
+  $appendUnique: [ 'last-if-missing' ],
+  comparator: function(a, b) { return a === b }
+}
+```
+
+Comparator is available for `appendUnique`, `prependUnique` and `remove` commands.
+
 ### Editable fields and `$append`, etc.
 
 For `editable`, specify the field name as the value, i.e. `{ $append: 'fieldname' }`.
