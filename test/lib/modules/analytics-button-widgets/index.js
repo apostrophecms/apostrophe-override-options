@@ -30,6 +30,8 @@ module.exports = {
   channelObjectsPrependUnique: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
   channelObjectsPrependUniqueString: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
   channelObjectsPrependUniqueFunc: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsReplaceString: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsReplaceFunc: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
   channelObjectsRemove: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
   channelObjectsRemoveString: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
   channelObjectsRemoveFunc: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
@@ -71,6 +73,8 @@ module.exports = {
         self.apos.testResults.channelObjectsPrependUnique = self.getOption(req, 'channelObjectsPrependUnique', []);
         self.apos.testResults.channelObjectsPrependUniqueString = self.getOption(req, 'channelObjectsPrependUniqueString', []);
         self.apos.testResults.channelObjectsPrependUniqueFunc = self.getOption(req, 'channelObjectsPrependUniqueFunc', []);
+        self.apos.testResults.channelObjectsReplaceString = self.getOption(req, 'channelObjectsReplaceString', []);
+        self.apos.testResults.channelObjectsReplaceFunc = self.getOption(req, 'channelObjectsReplaceFunc', []);
         self.apos.testResults.channelObjectsRemove = self.getOption(req, 'channelObjectsRemove', []);
         self.apos.testResults.channelObjectsRemoveString = self.getOption(req, 'channelObjectsRemoveString', []);
         self.apos.testResults.channelObjectsRemoveFunc = self.getOption(req, 'channelObjectsRemoveFunc', []);

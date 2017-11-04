@@ -114,15 +114,27 @@ module.exports = {
           array = _.get(moduleOptions, sliced) || [];
           return val.$prepend.concat(array);
         } else if (val.$appendUnique) {
-          array = (_.get(moduleOptions, sliced) || []).concat(val.$appendUnique);
-          return _.reverse(_.uniqWith(_.reverse(array), comparator));
+          array = _.get(moduleOptions, sliced) || [];
+          added = _.differenceWith(val.$appendUnique, array, comparator);
+          return array.concat(added);
         } else if (val.$prependUnique) {
-          array =  val.$prependUnique.concat(_.get(moduleOptions, sliced) || []);
-          return _.uniqWith(array, comparator);
+          array = _.get(moduleOptions, sliced) || [];
+          added = _.differenceWith(val.$prependUnique, array, comparator);
+          return added.concat(array || []);
         } else if (val.$remove) {
           array = _.get(moduleOptions, sliced);
           array = _.differenceWith(array, val.$remove, comparator);
           return array;
+        } else if (val.$replace) {
+          if (!val.comparator) {
+            console.warn('Using \'$replace\' without \'comparator\' is probably a bug')
+          }
+          var array = _.get(moduleOptions, sliced);
+          return _.map(array, function(item) {
+            return _.find(val.$replace, function(replaceItem) {
+              return comparator(replaceItem, item);
+            }) || item;
+          });
         } else if (val.$assign) {
           // As an escape mechanism
           return val.$assign;

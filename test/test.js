@@ -158,8 +158,8 @@ describe('Override Options', function() {
         assert.deepEqual(apos.testResults.channelIdsAppendEditable, [ 3, 5, 12 ]);
         assert.deepEqual(apos.testResults.channelObjectsAppend, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}, {foo: 'foo', bar: 'bar'}]);
         assert.deepEqual(apos.testResults.channelObjectsAppendUnique, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
-        assert.deepEqual(apos.testResults.channelObjectsAppendUniqueString, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'foo'}]);
-        assert.deepEqual(apos.testResults.channelObjectsAppendUniqueFunc, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'foo'}]);
+        assert.deepEqual(apos.testResults.channelObjectsAppendUniqueString, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsAppendUniqueFunc, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
         done();
       });
     });
@@ -169,11 +169,21 @@ describe('Override Options', function() {
         assert(!err);
         assert(response.statusCode < 400);
         assert.deepEqual(apos.testResults.channelIdsPrepend, [ 5, 7, 9, 3, 5 ]);
-        assert.deepEqual(apos.testResults.channelIdsPrependUnique, [ 5, 7, 9, 3 ]);
+        assert.deepEqual(apos.testResults.channelIdsPrependUnique, [ 7, 9, 3, 5 ]);
         assert.deepEqual(apos.testResults.channelObjectsPrepend, [{foo: 'foo', bar: 'bar'}, {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
-        assert.deepEqual(apos.testResults.channelObjectsPrependUnique, [{foo: 'foo', bar: 'bar'}, {foo: 'bar', bar: 'foo'}]);
-        assert.deepEqual(apos.testResults.channelObjectsPrependUniqueString, [{foo: 'foo', bar: 'foo'}, {foo: 'bar', bar: 'foo'}]);
-        assert.deepEqual(apos.testResults.channelObjectsPrependUniqueFunc, [{foo: 'foo', bar: 'foo'}, {foo: 'bar', bar: 'foo'}]);
+        assert.deepEqual(apos.testResults.channelObjectsPrependUnique, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsPrependUniqueString, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsPrependUniqueFunc, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        done();
+      });
+    });
+
+    it('should replace an item matching in array option', function(done) {
+      request('http://localhost:7900/tab/grandkid', function(err, response, body) {
+        assert(!err);
+        assert(response.statusCode < 400);
+        assert.deepEqual(apos.testResults.channelObjectsReplaceString, [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'newBar'} ]);
+        assert.deepEqual(apos.testResults.channelObjectsReplaceFunc, [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'newBar'} ]);
         done();
       });
     });

@@ -18,11 +18,11 @@ module.exports = {
         $appendUnique: [{ foo: 'foo', bar: 'bar' }]
       },
       'apos.analytics-button-widgets.channelObjectsAppendUniqueString': {
-        $appendUnique: [{ foo: 'foo', bar: 'foo' }],
+        $appendUnique: [{ foo: 'foo', bar: 'newBar' }],
         comparator: 'foo'
       },
       'apos.analytics-button-widgets.channelObjectsAppendUniqueFunc': {
-        $appendUnique: [{ foo: 'foo', bar: 'foo' }],
+        $appendUnique: [{ foo: 'foo', bar: 'newBar' }],
         comparator: function(value, other) {
           return value.foo === other.foo;
         }
@@ -34,14 +34,28 @@ module.exports = {
         $prependUnique: [{ foo: 'foo', bar: 'bar' }]
       },
       'apos.analytics-button-widgets.channelObjectsPrependUniqueString': {
-        $prependUnique: [{ foo: 'foo', bar: 'foo' }],
+        $prependUnique: [{ foo: 'foo', bar: 'newBar' }],
         comparator: 'foo'
+      },
+      'apos.analytics-button-widgets.channelObjectsPrependUniqueFunc': {
+        $prependUnique: [{ foo: 'foo', bar: 'newBar' }],
+        comparator: function(value, other) {
+          return value.foo === other.foo;
+        }
       },
       'apos.analytics-button-widgets.channelObjectsPrependUniqueFunc': {
         $prependUnique: [{ foo: 'foo', bar: 'foo' }],
         comparator: function(value, other) {
           return value.foo === other.foo;
         }
+      },
+      'apos.analytics-button-widgets.channelObjectsReplaceString': {
+        $replace: [{ foo: 'foo', bar: 'newBar' }],
+        comparator: 'foo'
+      },
+      'apos.analytics-button-widgets.channelObjectsReplaceFunc': {
+        $replace: [{ foo: 'foo', bar: 'newBar' }],
+        comparator: 'foo'
       },
       'apos.analytics-button-widgets.channelObjectsRemove': {
         $remove: [{ foo: 'foo', bar: 'bar' }]
