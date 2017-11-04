@@ -73,6 +73,11 @@ This special syntax can be used to add and remove array elements from options:
   'apos.analytics-button-widgets.eventIds': { $append: [ 'at-the-end' ] }
   // prepends to an array, which must already exist
   'apos.analytics-button-widgets.eventIds': { $prepend: [ 'at-the-start' ] }
+  // replace elements in array
+  'apos.analytics-button-widgets.eventIds': {
+    $replace: [ { id: 42, value: 'newValue' } ],
+    comparator: 'id'
+  }
   // removes from an array, which must already be an array.
   // It is OK if the values removed are already gone
   'apos.analytics-button-widgets.eventIds': { $remove: [ 'this-one-goes-away' ] }
@@ -82,7 +87,9 @@ This special syntax can be used to add and remove array elements from options:
   'apos.analytics-button-widgets.eventIds': { $prependUnique: [ 'first-if-missing' ] }
 ```
 
-### Customize the `unique` checking
+### Customize the `comparator`
+
+The comparator is available for `appendUnique`, `prependUnique`, `replace` and `remove` commands.
 
 ```javascript
 // appends testing unicity with custom function (also working with a string checking property of item)
@@ -91,8 +98,6 @@ This special syntax can be used to add and remove array elements from options:
   comparator: function(a, b) { return a === b }
 }
 ```
-
-Comparator is available for `appendUnique`, `prependUnique` and `remove` commands.
 
 ### Editable fields and `$append`, etc.
 
@@ -176,7 +181,7 @@ For performance, this module computes its results just before `pageServe` method
 
 Any invocation of `getOption` before this point will invoke the default implementation.
 
-However, `req.data.piece` is not set until the `pageServe` process is already underway. To address this issue, this module recomputes its results when a `show` page is encountered. This means that the impact of the piece type or piece settings will be honored in `getOption` calls in templates, or in JavaScript code invoked by `pageBeforeSend`. It is, however, too late for `getOption` to be honored inside the `load` methods of widgets on the page. 
+However, `req.data.piece` is not set until the `pageServe` process is already underway. To address this issue, this module recomputes its results when a `show` page is encountered. This means that the impact of the piece type or piece settings will be honored in `getOption` calls in templates, or in JavaScript code invoked by `pageBeforeSend`. It is, however, too late for `getOption` to be honored inside the `load` methods of widgets on the page.
 
 You may optionally address this issue by passing this option to the `apostrophe-areas` module:
 
