@@ -127,7 +127,7 @@ module.exports = {
           return array;
         } else if (val.$replace) {
           if (!val.comparator) {
-            console.warn('Using \'$replace\' without \'comparator\' is probably a bug')
+            console.warn('Using \'$replace\' without \'comparator\' is probably a bug');
           }
           var array = _.get(moduleOptions, sliced);
           return _.map(array, function(item) {
