@@ -16,12 +16,25 @@ module.exports = {
   eventId: 'module-default',
   eventId3: 'module-default',
   eventId4: 'module-default',
-  channelIds: [ 3, 5 ],
-  channelIds2: [ 3, 5 ],
-  channelIds3: [ 3, 5 ],
-  channelIds4: [ 3, 5 ],
-  channelIds5: [ 3, 5 ],
-  channelIds6: [ 3, 5 ],
+  channelIdsAppend: [ 3, 5 ],
+  channelIdsAppendUnique: [ 3, 5 ],
+  channelIdsPrepend: [ 3, 5 ],
+  channelIdsPrependUnique: [ 3, 5 ],
+  channelIdsRemove: [ 3, 5 ],
+  channelIdsAppendEditable: [ 3, 5 ],
+  channelObjectsAppend: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsAppendUnique: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsAppendUniqueString: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsAppendUniqueFunc: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsPrepend: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsPrependUnique: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsPrependUniqueString: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsPrependUniqueFunc: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsReplaceString: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsReplaceFunc: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsRemove: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsRemoveString: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
+  channelObjectsRemoveFunc: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
   flavor: {
     mouthfeel: 'tangy',
     sweetness: 'very'
@@ -46,12 +59,25 @@ module.exports = {
         self.apos.testResults.eventId = self.getOption(req, 'eventId', 'default');
         self.apos.testResults.eventId2 = self.getOption(req, 'eventId2', 'default');
         self.apos.testResults.eventId3 = self.getOption(req, 'eventId3', 'default');
-        self.apos.testResults.channelIds = self.getOption(req, 'channelIds', []);
-        self.apos.testResults.channelIds2 = self.getOption(req, 'channelIds2', []);
-        self.apos.testResults.channelIds3 = self.getOption(req, 'channelIds3', []);
-        self.apos.testResults.channelIds4 = self.getOption(req, 'channelIds4', []);
-        self.apos.testResults.channelIds5 = self.getOption(req, 'channelIds5', []);
-        self.apos.testResults.channelIds6 = self.getOption(req, 'channelIds6', []);
+        self.apos.testResults.channelIdsAppend = self.getOption(req, 'channelIdsAppend', []);
+        self.apos.testResults.channelIdsAppendUnique = self.getOption(req, 'channelIdsAppendUnique', []);
+        self.apos.testResults.channelIdsPrepend = self.getOption(req, 'channelIdsPrepend', []);
+        self.apos.testResults.channelIdsPrependUnique = self.getOption(req, 'channelIdsPrependUnique', []);
+        self.apos.testResults.channelIdsRemove = self.getOption(req, 'channelIdsRemove', []);
+        self.apos.testResults.channelIdsAppendEditable = self.getOption(req, 'channelIdsAppendEditable', []);
+        self.apos.testResults.channelObjectsAppend = self.getOption(req, 'channelObjectsAppend', []);
+        self.apos.testResults.channelObjectsAppendUnique = self.getOption(req, 'channelObjectsAppendUnique', []);
+        self.apos.testResults.channelObjectsAppendUniqueString = self.getOption(req, 'channelObjectsAppendUniqueString', []);
+        self.apos.testResults.channelObjectsAppendUniqueFunc = self.getOption(req, 'channelObjectsAppendUniqueFunc', []);
+        self.apos.testResults.channelObjectsPrepend = self.getOption(req, 'channelObjectsPrepend', []);
+        self.apos.testResults.channelObjectsPrependUnique = self.getOption(req, 'channelObjectsPrependUnique', []);
+        self.apos.testResults.channelObjectsPrependUniqueString = self.getOption(req, 'channelObjectsPrependUniqueString', []);
+        self.apos.testResults.channelObjectsPrependUniqueFunc = self.getOption(req, 'channelObjectsPrependUniqueFunc', []);
+        self.apos.testResults.channelObjectsReplaceString = self.getOption(req, 'channelObjectsReplaceString', []);
+        self.apos.testResults.channelObjectsReplaceFunc = self.getOption(req, 'channelObjectsReplaceFunc', []);
+        self.apos.testResults.channelObjectsRemove = self.getOption(req, 'channelObjectsRemove', []);
+        self.apos.testResults.channelObjectsRemoveString = self.getOption(req, 'channelObjectsRemoveString', []);
+        self.apos.testResults.channelObjectsRemoveFunc = self.getOption(req, 'channelObjectsRemoveFunc', []);
         self.apos.testResults.mouthfeel = self.getOption(req, 'flavor.mouthfeel', 'default');
         self.apos.testResults.sweetness = self.getOption(req, 'flavor.sweetness', 'default');
         self.apos.testResults.incredible = self.getOption(req, 'flavor.incredible', false);

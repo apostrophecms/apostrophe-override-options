@@ -14,7 +14,7 @@ module.exports = {
   overrideOptions: {
     editable: {
       'apos.analytics-button-widgets.eventId': 'analyticsEventId',
-      'apos.analytics-button-widgets.channelIds6': { $append: 'extraChannelId' }
+      'apos.analytics-button-widgets.channelIdsAppendEditable': { $append: 'extraChannelId' }
     }
   }
 };

@@ -96,6 +96,17 @@ module.exports = {
     
     self.getNewOptionValue = function(req, moduleOptions, sliced, val) {
       if (val && (typeof(val) === 'object')) {
+        var comparator;
+        if (typeof(val.comparator) === 'string') {
+          comparator = function(value, other) {
+            return value[val.comparator] === other[val.comparator];
+          }
+        } else if (typeof(val.comparator) === 'function') {
+          comparator = val.comparator;
+        } else {
+          comparator = _.isEqual;
+        }
+
         if (val.$append) {
           array = _.get(moduleOptions, sliced) || [];
           return array.concat(val.$append);
@@ -104,16 +115,26 @@ module.exports = {
           return val.$prepend.concat(array);
         } else if (val.$appendUnique) {
           array = _.get(moduleOptions, sliced) || [];
-          added = _.differenceWith(val.$appendUnique, array, _.isEqual);
+          added = _.differenceWith(val.$appendUnique, array, comparator);
           return array.concat(added);
         } else if (val.$prependUnique) {
           array = _.get(moduleOptions, sliced) || [];
-          added = _.differenceWith(val.$prependUnique, array, _.isEqual);
+          added = _.differenceWith(val.$prependUnique, array, comparator);
           return added.concat(array || []);
         } else if (val.$remove) {
           array = _.get(moduleOptions, sliced);
-          array = _.differenceWith(array, val.$remove, _.isEqual);
+          array = _.differenceWith(array, val.$remove, comparator);
           return array;
+        } else if (val.$replace) {
+          if (!val.comparator) {
+            console.warn('Using \'$replace\' without \'comparator\' is probably a bug');
+          }
+          var array = _.get(moduleOptions, sliced);
+          return _.map(array, function(item) {
+            return _.find(val.$replace, function(replaceItem) {
+              return comparator(replaceItem, item);
+            }) || item;
+          });
         } else if (val.$assign) {
           // As an escape mechanism
           return val.$assign;

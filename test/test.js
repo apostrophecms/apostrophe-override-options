@@ -141,19 +141,65 @@ describe('Override Options', function() {
       assert(!err);
       assert(response.statusCode < 400);
       assert.equal(apos.testResults.eventId, 'setting-grandkid');
-      // Tests of the array operators like $prepend, see modules
-      assert.deepEqual(apos.testResults.channelIds, [ 3, 5, 5, 7, 9 ]);
-      assert.deepEqual(apos.testResults.channelIds2, [ 3, 5, 7, 9 ]);
-      assert.deepEqual(apos.testResults.channelIds3, [ 5, 7, 9, 3, 5 ]);
-      assert.deepEqual(apos.testResults.channelIds4, [ 7, 9, 3, 5 ]);
-      assert.deepEqual(apos.testResults.channelIds5, [ 3 ]);
-      assert.deepEqual(apos.testResults.channelIds6, [ 3, 5, 12 ]);
       // Default locale is in effect
       assert.equal(apos.testResults.mouthfeel, 'bitter-default');
       assert.equal(apos.testResults.sweetness, 'very-default');
       done();
     });
   });
+
+  describe('Arrays', function() {
+    it('should append values to array option', function(done) {
+      request('http://localhost:7900/tab/grandkid', function(err, response, body) {
+        assert(!err);
+        assert(response.statusCode < 400);
+        assert.deepEqual(apos.testResults.channelIdsAppend, [ 3, 5, 5, 7, 9 ]);
+        assert.deepEqual(apos.testResults.channelIdsAppendUnique, [ 3, 5, 7, 9 ]);
+        assert.deepEqual(apos.testResults.channelIdsAppendEditable, [ 3, 5, 12 ]);
+        assert.deepEqual(apos.testResults.channelObjectsAppend, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsAppendUnique, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsAppendUniqueString, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsAppendUniqueFunc, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        done();
+      });
+    });
+
+    it('should prepend values to array option', function(done) {
+      request('http://localhost:7900/tab/grandkid', function(err, response, body) {
+        assert(!err);
+        assert(response.statusCode < 400);
+        assert.deepEqual(apos.testResults.channelIdsPrepend, [ 5, 7, 9, 3, 5 ]);
+        assert.deepEqual(apos.testResults.channelIdsPrependUnique, [ 7, 9, 3, 5 ]);
+        assert.deepEqual(apos.testResults.channelObjectsPrepend, [{foo: 'foo', bar: 'bar'}, {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsPrependUnique, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsPrependUniqueString, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsPrependUniqueFunc, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        done();
+      });
+    });
+
+    it('should replace an item matching in array option', function(done) {
+      request('http://localhost:7900/tab/grandkid', function(err, response, body) {
+        assert(!err);
+        assert(response.statusCode < 400);
+        assert.deepEqual(apos.testResults.channelObjectsReplaceString, [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'newBar'} ]);
+        assert.deepEqual(apos.testResults.channelObjectsReplaceFunc, [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'newBar'} ]);
+        done();
+      });
+    });
+
+    it('should remove values to array option', function(done) {
+      request('http://localhost:7900/tab/grandkid', function(err, response, body) {
+        assert(!err);
+        assert(response.statusCode < 400);
+        assert.deepEqual(apos.testResults.channelIdsRemove, [ 3 ]);
+        assert.deepEqual(apos.testResults.channelObjectsRemove, [{foo: 'bar', bar: 'foo'}]);
+        assert.deepEqual(apos.testResults.channelObjectsRemoveString, [{foo: 'bar', bar: 'foo'}]);
+        assert.deepEqual(apos.testResults.channelObjectsRemoveFunc, [{foo: 'bar', bar: 'foo'}]);
+        done();
+      });
+    });
+  })
 
   it('should see the impact of localized options for en', function(done) {
     // This URL is designed to work specifically with the mock workflow module provided
