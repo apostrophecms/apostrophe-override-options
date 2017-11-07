@@ -1,3 +1,7 @@
+## 2.1.3
+
+* New `$replace` operator for manipulating array options. Thanks to Arthur.
+
 ## 2.1.2
 
 * The mechanism allowing self-overrides via `editable` and template options in widget modules has been completely rewritten to fully leverage the mechanisms used by other overrides. This eliminates a number of bugs relating to arrays and nested options.

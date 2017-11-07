@@ -73,7 +73,7 @@ This special syntax can be used to add and remove array elements from options:
   'apos.analytics-button-widgets.eventIds': { $append: [ 'at-the-end' ] }
   // prepends to an array, which must already exist
   'apos.analytics-button-widgets.eventIds': { $prepend: [ 'at-the-start' ] }
-  // replace elements in array
+  // replace elements in array, only if a match is found
   'apos.analytics-button-widgets.eventIds': {
     $replace: [ { id: 42, value: 'newValue' } ],
     comparator: 'id'
@@ -92,7 +92,8 @@ This special syntax can be used to add and remove array elements from options:
 The comparator is available for `appendUnique`, `prependUnique`, `replace` and `remove` commands.
 
 ```javascript
-// appends testing unicity with custom function (also working with a string checking property of item)
+// You can pass a custom function, as shown here, or a string containing
+// a property name for a simple property comparison
 'apos.analytics-button-widgets.eventIds': {
   $appendUnique: [ 'last-if-missing' ],
   comparator: function(a, b) { return a === b }
