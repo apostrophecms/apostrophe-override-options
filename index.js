@@ -164,6 +164,7 @@ module.exports = {
         // because I'm avoiding hardcoding this for
         // every verb.
         verb = _.keys(field)[0];
+        comparator = field.comparator
         field = _.values(field)[0];
         val = doc[field];
         if (!Array.isArray(val)) {
@@ -175,6 +176,9 @@ module.exports = {
         }
         object = {};
         object[verb] = val;
+        if (comparator) {
+          object.comparator = comparator;
+        }
         val = object;
       } else {
         val = doc[field];
