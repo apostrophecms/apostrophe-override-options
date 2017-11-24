@@ -56,6 +56,10 @@ describe('Override Options', function() {
                   type: 'default',
                   analyticsEventId: 'setting-grandkid',
                   extraChannelId: 12,
+                  analyticTags: [
+                    { key: 'key2', value: 'newVal2' },
+                    { key: 'key3', value: 'newVal3'}
+                  ],
                   slug: '/tab/grandkid',
                   published: true
                 }
@@ -184,6 +188,11 @@ describe('Override Options', function() {
         assert(response.statusCode < 400);
         assert.deepEqual(apos.testResults.channelObjectsReplaceString, [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'newBar'} ]);
         assert.deepEqual(apos.testResults.channelObjectsReplaceFunc, [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'newBar'} ]);
+        assert.deepEqual(apos.testResults.channelObjectsReplaceEditable, [
+          { key: 'key1', value: 'val1' },
+          { key: 'key2', value: 'newVal2' },
+          { key: 'key3', value: 'newVal3'}
+        ]);
         done();
       });
     });

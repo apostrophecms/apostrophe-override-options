@@ -22,6 +22,11 @@ module.exports = {
   channelIdsPrependUnique: [ 3, 5 ],
   channelIdsRemove: [ 3, 5 ],
   channelIdsAppendEditable: [ 3, 5 ],
+  channelObjectsReplaceEditable: [
+    { key: 'key1', value: 'val1' },
+    { key: 'key2', value: 'val2' },
+    { key: 'key3', value: 'val3' }
+  ],
   channelObjectsAppend: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
   channelObjectsAppendUnique: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
   channelObjectsAppendUniqueString: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
@@ -65,6 +70,7 @@ module.exports = {
         self.apos.testResults.channelIdsPrependUnique = self.getOption(req, 'channelIdsPrependUnique', []);
         self.apos.testResults.channelIdsRemove = self.getOption(req, 'channelIdsRemove', []);
         self.apos.testResults.channelIdsAppendEditable = self.getOption(req, 'channelIdsAppendEditable', []);
+        self.apos.testResults.channelObjectsReplaceEditable = self.getOption(req, 'channelObjectsReplaceEditable', []);
         self.apos.testResults.channelObjectsAppend = self.getOption(req, 'channelObjectsAppend', []);
         self.apos.testResults.channelObjectsAppendUnique = self.getOption(req, 'channelObjectsAppendUnique', []);
         self.apos.testResults.channelObjectsAppendUniqueString = self.getOption(req, 'channelObjectsAppendUniqueString', []);
