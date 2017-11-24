@@ -25,7 +25,8 @@ module.exports = {
   channelObjectsReplaceEditable: [
     { key: 'key1', value: 'val1' },
     { key: 'key2', value: 'val2' },
-    { key: 'key3', value: 'val3' }
+    { key: 'key3', value: 'val3' },
+    { key: 'key4', value: 'val4' }
   ],
   channelObjectsAppend: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
   channelObjectsAppendUnique: [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'} ],
