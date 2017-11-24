@@ -57,6 +57,15 @@ module.exports = {
         $replace: [{ foo: 'foo', bar: 'newBar' }],
         comparator: 'foo'
       },
+      'apos.analytics-button-widgets.channelObjectsMerge': {
+        $merge: [
+          { key: 'anotherKey1', value: 'anotherValue1Authored'},
+          { key: 'key2', value: 'newVal2Authored' },
+          { key: 'key3', value: 'newVal3Authored'},
+          { key: 'anotherKey2', value: 'anotherValue2Authored'}
+        ],
+        comparator: 'key'
+      },
       'apos.analytics-button-widgets.channelObjectsRemove': {
         $remove: [{ foo: 'foo', bar: 'bar' }]
       },
