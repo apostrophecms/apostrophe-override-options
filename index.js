@@ -147,10 +147,10 @@ module.exports = {
           });
           var additional = val.$merge.filter(function (replaceItem) {
             return array.every(function (item) {
-              return !comparator(item, replaceItem)
+              return !comparator(item, replaceItem);
             })
           })
-          return array.concat(additional)
+          return array.concat(additional);
         } else if (val.$assign) {
           // As an escape mechanism
           return val.$assign;
@@ -180,7 +180,7 @@ module.exports = {
         // because I'm avoiding hardcoding this for
         // every verb.
         verb = _.keys(field)[0];
-        comparator = field.comparator
+        comparator = field.comparator;
         field = _.values(field)[0];
         val = doc[field];
         if (!Array.isArray(val)) {

@@ -211,7 +211,7 @@ describe('Override Options', function() {
           { key: 'key4', value: 'val4' },
           { key: 'anotherKey1', value: 'anotherValue1Authored'},
           { key: 'anotherKey2', value: 'anotherValue2Authored'}
-        ]
+        ];
         assert.deepEqual(apos.testResults.channelObjectsMerge, expected);
         assert.deepEqual(apos.testResults.channelObjectsMergeEditable, expected);
         done();
