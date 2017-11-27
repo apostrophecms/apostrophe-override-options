@@ -1,6 +1,6 @@
 {
   "name": "apostrophe-override-options",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "Override Apostrophe's getOption method based on the current page type, page settings, etc.",
   "main": "index.js",
   "scripts": {
