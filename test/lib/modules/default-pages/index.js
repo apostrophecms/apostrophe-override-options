@@ -31,7 +31,8 @@ module.exports = {
     editable: {
       'apos.analytics-button-widgets.eventId': 'analyticsEventId',
       'apos.analytics-button-widgets.channelIdsAppendEditable': { $append: 'extraChannelId' },
-      'apos.analytics-button-widgets.channelObjectsReplaceEditable': { $replace: [ 'analyticTags' ], comparator: 'key' }
+      'apos.analytics-button-widgets.channelObjectsReplaceEditable': { $replace: [ 'analyticTags' ], comparator: 'key' },
+      'apos.analytics-button-widgets.channelObjectsMergeEditable': { $merge: [ 'analyticTags' ], comparator: 'key' }
     }
   }
 };

@@ -135,6 +135,22 @@ module.exports = {
               return comparator(replaceItem, item);
             }) || item;
           });
+        } else if (val.$merge) {
+          if (!val.comparator) {
+            console.warn('Using \'$merge\' without \'comparator\' is probably a bug');
+          }
+          var array = _.get(moduleOptions, sliced);
+          array = _.map(array, function(item) {
+            return _.find(val.$merge, function(replaceItem) {
+              return comparator(replaceItem, item);
+            }) || item;
+          });
+          var additional = val.$merge.filter(function (replaceItem) {
+            return array.every(function (item) {
+              return !comparator(item, replaceItem);
+            });
+          });
+          return array.concat(additional);
         } else if (val.$assign) {
           // As an escape mechanism
           return val.$assign;
