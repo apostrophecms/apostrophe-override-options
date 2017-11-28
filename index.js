@@ -148,8 +148,8 @@ module.exports = {
           var additional = val.$merge.filter(function (replaceItem) {
             return array.every(function (item) {
               return !comparator(item, replaceItem);
-            })
-          })
+            });
+          });
           return array.concat(additional);
         } else if (val.$assign) {
           // As an escape mechanism
