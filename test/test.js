@@ -56,6 +56,12 @@ describe('Override Options', function() {
                   type: 'default',
                   analyticsEventId: 'setting-grandkid',
                   extraChannelId: 12,
+                  analyticTags: [
+                    { key: 'anotherKey1', value: 'anotherValue1Authored'},
+                    { key: 'key2', value: 'newVal2Authored' },
+                    { key: 'key3', value: 'newVal3Authored'},
+                    { key: 'anotherKey2', value: 'anotherValue2Authored'}
+                  ],
                   slug: '/tab/grandkid',
                   published: true
                 }
@@ -184,6 +190,30 @@ describe('Override Options', function() {
         assert(response.statusCode < 400);
         assert.deepEqual(apos.testResults.channelObjectsReplaceString, [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'newBar'} ]);
         assert.deepEqual(apos.testResults.channelObjectsReplaceFunc, [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'newBar'} ]);
+        assert.deepEqual(apos.testResults.channelObjectsReplaceEditable, [
+          { key: 'key1', value: 'val1' },
+          { key: 'key2', value: 'newVal2Authored' },
+          { key: 'key3', value: 'newVal3Authored' },
+          { key: 'key4', value: 'val4' }
+        ]);
+        done();
+      });
+    });
+
+    it('should merge items (replace matching items and append the rest)', function(done) {
+      request('http://localhost:7900/tab/grandkid', function(err, response, body) {
+        assert(!err);
+        assert(response.statusCode < 400);
+        var expected = [
+          { key: 'key1', value: 'val1' },
+          { key: 'key2', value: 'newVal2Authored' },
+          { key: 'key3', value: 'newVal3Authored' },
+          { key: 'key4', value: 'val4' },
+          { key: 'anotherKey1', value: 'anotherValue1Authored'},
+          { key: 'anotherKey2', value: 'anotherValue2Authored'}
+        ];
+        assert.deepEqual(apos.testResults.channelObjectsMerge, expected);
+        assert.deepEqual(apos.testResults.channelObjectsMergeEditable, expected);
         done();
       });
     });

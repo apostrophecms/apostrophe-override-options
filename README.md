@@ -85,6 +85,11 @@ This special syntax can be used to add and remove array elements from options:
   'apos.analytics-button-widgets.eventIds': { $appendUnique: [ 'last-if-missing' ] }
   // prepends only if value not already present
   'apos.analytics-button-widgets.eventIds': { $prependUnique: [ 'first-if-missing' ] }
+  // merge and append the rest of non-matching elements
+  'apos.analytics-button-widgets.eventIds': {
+    $merge: [ { id: 42, value: 'changedValue' }, { id: 43, value: 'newValue' } ],
+    comparator: 'id'
+  }
 ```
 
 ### Customize the `comparator`
