@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/punkave/apostrophe-override-options.git"
+    "url": "git+https://github.com/apostrophecms/apostrophe-override-options.git"
   },
   "keywords": [
     "apostrophecms",
@@ -18,9 +18,9 @@
   "author": "P'unk Avenue LLC",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/punkave/apostrophe-override-options/issues"
+    "url": "https://github.com/apostrophecms/apostrophe-override-options/issues"
   },
-  "homepage": "https://github.com/punkave/apostrophe-override-options#readme",
+  "homepage": "https://github.com/apostrophecms/apostrophe-override-options#readme",
   "devDependencies": {
     "assert": "^1.4.1",
     "async": "^2.5.0",
