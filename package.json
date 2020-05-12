@@ -1,6 +1,6 @@
 {
   "name": "apostrophe-override-options",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Override Apostrophe's getOption method based on the current page type, page settings, etc.",
   "main": "index.js",
   "scripts": {
@@ -12,10 +12,9 @@
   },
   "keywords": [
     "apostrophecms",
-    "apostrophe",
-    "cms"
+    "apostrophe"
   ],
-  "author": "P'unk Avenue LLC",
+  "author": "Apostrophe Technologies, Inc.",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/apostrophecms/apostrophe-override-options/issues"

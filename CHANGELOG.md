@@ -1,3 +1,7 @@
+## 2.2.1
+
+* Declares two variables explicitly that had not been.
+
 ## 2.2.0
 
 * New `$merge` operator for manipulating array options. Set the `comparator` property to the property name to be compared for equality, such as `id`, or to a function that compares two elements, returning true if they match. If the comparator finds a match for an element in the array, it is replaced with the `value` property. Otherwise the `value` property is appended as a new array element. Thanks to Etienne Laurent.
