@@ -4,7 +4,7 @@
   "description": "Override Apostrophe's getOption method based on the current page type, page settings, etc.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/test.js"
+    "test": "npx eslint . && mocha test/test.js"
   },
   "repository": {
     "type": "git",
