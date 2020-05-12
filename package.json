@@ -21,11 +21,18 @@
   },
   "homepage": "https://github.com/apostrophecms/apostrophe-override-options#readme",
   "devDependencies": {
+    "apostrophe": "^2.26.1",
     "assert": "^1.4.1",
     "async": "^2.5.0",
-    "request": "^2.83.0",
-    "apostrophe": "^2.26.1",
-    "mocha": "^3.4.2"
+    "eslint": "^6.5.1",
+    "eslint-config-apostrophe": "^3.1.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "mocha": "^3.4.2",
+    "request": "^2.83.0"
   },
   "dependencies": {
     "lodash": "^4.17.4"

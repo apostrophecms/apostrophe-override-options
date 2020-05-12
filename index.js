@@ -17,7 +17,7 @@ module.exports = {
 
     self.modulesReady = function() {
       self.compileLocaleTree();
-    },
+    };
 
     // Populates `req.aposOptions` with a version of
     // the options object for each module that has been
@@ -81,8 +81,7 @@ module.exports = {
         req.aposOptions[name][primary] = _.cloneDeepWith(req.aposOptions[module.__meta.name][primary], cloneCustom);
         req.aposOptions[name].__clonedPrimaries[primary] = true;
       }
-      var array;
-      var added;
+
       var moduleOptions = req.aposOptions[name];
 
       _.set(moduleOptions, path, self.getNewOptionValue(req, moduleOptions, path, val));
@@ -93,20 +92,21 @@ module.exports = {
     // and an intended value `val` (which may be an object containing any of the
     // documented operators for this module such as ``$append`), return the
     // new value that is appropriate for `path`.
-    
+
     self.getNewOptionValue = function(req, moduleOptions, sliced, val) {
-      if (val && (typeof(val) === 'object')) {
+      if (val && (typeof (val) === 'object')) {
         var comparator;
-        if (typeof(val.comparator) === 'string') {
+        if (typeof (val.comparator) === 'string') {
           comparator = function(value, other) {
             return value[val.comparator] === other[val.comparator];
-          }
-        } else if (typeof(val.comparator) === 'function') {
+          };
+        } else if (typeof (val.comparator) === 'function') {
           comparator = val.comparator;
         } else {
           comparator = _.isEqual;
         }
-
+        var array;
+        var added;
         if (val.$append) {
           array = _.get(moduleOptions, sliced) || [];
           return array.concat(val.$append);
@@ -127,9 +127,10 @@ module.exports = {
           return array;
         } else if (val.$replace) {
           if (!val.comparator) {
+            // eslint-disable-next-line no-console
             console.warn('Using \'$replace\' without \'comparator\' is probably a bug');
           }
-          var array = _.get(moduleOptions, sliced);
+          array = _.get(moduleOptions, sliced);
           return _.map(array, function(item) {
             return _.find(val.$replace, function(replaceItem) {
               return comparator(replaceItem, item);
@@ -137,9 +138,10 @@ module.exports = {
           });
         } else if (val.$merge) {
           if (!val.comparator) {
+            // eslint-disable-next-line no-console
             console.warn('Using \'$merge\' without \'comparator\' is probably a bug');
           }
-          var array = _.get(moduleOptions, sliced);
+          array = _.get(moduleOptions, sliced);
           array = _.map(array, function(item) {
             return _.find(val.$merge, function(replaceItem) {
               return comparator(replaceItem, item);
@@ -157,13 +159,13 @@ module.exports = {
         } else {
           return val;
         }
-      } else if (val && (typeof(val) === 'function')) {
+      } else if (val && (typeof (val) === 'function')) {
         return val(req, moduleOptions, sliced, _.get(moduleOptions, sliced));
       } else {
         return val;
-      }      
+      }
     };
-    
+
     // Given a doc and a field name, return the field value
     // suitable for use with `overrideKey`. This method handles
     // both simple field names like `name` and array modifiers
@@ -171,7 +173,7 @@ module.exports = {
     // like `'Jane'` and `{$ append: 'Jane' }`.
     self.getEditableFieldValue = function(doc, field) {
       var val;
-      if (typeof(field) === 'object') {
+      if (typeof (field) === 'object') {
         // It's a command like $append. Build an
         // object like { $append: [ 5 ] } from an
         // object like { $append: 'fieldname' }.
@@ -190,7 +192,7 @@ module.exports = {
             val = [];
           }
         }
-        object = {};
+        var object = {};
         object[verb] = val;
         if (comparator) {
           object.comparator = comparator;
@@ -208,7 +210,6 @@ module.exports = {
     // as `optionsSource`.
 
     self.applyOverridesFromDoc = function(req, doc, optionsSource) {
-      var manager;
       if (!optionsSource) {
         optionsSource = self.apos.docs.getManager(doc.type);
       }
@@ -238,10 +239,8 @@ module.exports = {
         });
       }
       _.each(editable || {}, function(field, key) {
-        var verb;
         // like `'Jane'` and `{$ append: 'Jane' }`.
-        var object;
-        val = self.getEditableFieldValue(doc, field);
+        var val = self.getEditableFieldValue(doc, field);
         if (val || (val === 0)) {
           self.overrideKey(req, optionsSource, key, val);
         }
@@ -271,7 +270,7 @@ module.exports = {
     // _.clone handles most other types well.
 
     function cloneCustom(item) {
-      if (typeof(item) === 'function') {
+      if (typeof (item) === 'function') {
         return item;
       }
     }
