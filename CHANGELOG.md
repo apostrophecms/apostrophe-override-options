@@ -1,6 +1,7 @@
 ## 2.2.1
 
-* Declares two variables explicitly that had not been.
+* Declares two variables explicitly that had not been. Adds eslint to the test
+script.
 
 ## 2.2.0
 
