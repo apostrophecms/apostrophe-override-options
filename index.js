@@ -179,8 +179,8 @@ module.exports = {
         // appending nothing. This code looks weird
         // because I'm avoiding hardcoding this for
         // every verb.
-        verb = _.keys(field)[0];
-        comparator = field.comparator;
+        var verb = _.keys(field)[0];
+        var comparator = field.comparator;
         field = _.values(field)[0];
         val = doc[field];
         if (!Array.isArray(val)) {
