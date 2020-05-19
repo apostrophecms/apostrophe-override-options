@@ -96,11 +96,11 @@ module.exports = {
     self.getNewOptionValue = function(req, moduleOptions, sliced, val) {
       if (val && (typeof val === 'object')) {
         var comparator;
-        if (typeof (val.comparator) === 'string') {
+        if (typeof val.comparator === 'string') {
           comparator = function(value, other) {
             return value[val.comparator] === other[val.comparator];
           };
-        } else if (typeof (val.comparator) === 'function') {
+        } else if (typeof val.comparator === 'function') {
           comparator = val.comparator;
         } else {
           comparator = _.isEqual;
@@ -159,7 +159,7 @@ module.exports = {
         } else {
           return val;
         }
-      } else if (val && (typeof (val) === 'function')) {
+      } else if (val && (typeof val === 'function')) {
         return val(req, moduleOptions, sliced, _.get(moduleOptions, sliced));
       } else {
         return val;
@@ -173,7 +173,7 @@ module.exports = {
     // like `'Jane'` and `{$ append: 'Jane' }`.
     self.getEditableFieldValue = function(doc, field) {
       var val;
-      if (typeof (field) === 'object') {
+      if (typeof field === 'object') {
         // It's a command like $append. Build an
         // object like { $append: [ 5 ] } from an
         // object like { $append: 'fieldname' }.
@@ -270,7 +270,7 @@ module.exports = {
     // _.clone handles most other types well.
 
     function cloneCustom(item) {
-      if (typeof (item) === 'function') {
+      if (typeof item === 'function') {
         return item;
       }
     }
