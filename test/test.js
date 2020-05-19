@@ -1,14 +1,10 @@
 var assert = require('assert');
 var _ = require('lodash');
-var async = require('async');
 var request = require('request');
-var fs = require('fs');
 
 describe('Override Options', function() {
 
   var apos;
-
-  var testResults = {};
 
   this.timeout(5000);
 
@@ -16,14 +12,14 @@ describe('Override Options', function() {
   //   apos.db.dropDatabase();
   // });
 
-  //////
+  /// ///
   // EXISTENCE
-  //////
+  /// ///
 
   it('should be a property of the apos object', function(done) {
     apos = require('apostrophe')({
       testModule: true,
-      
+
       modules: {
         'apostrophe-express': {
           port: 7900
@@ -47,7 +43,7 @@ describe('Override Options', function() {
                     type: 'analytics-button',
                     // empty string should not override
                     eventId4: ''
-                  },
+                  }
                 ]
               },
               _children: [
@@ -57,10 +53,22 @@ describe('Override Options', function() {
                   analyticsEventId: 'setting-grandkid',
                   extraChannelId: 12,
                   analyticTags: [
-                    { key: 'anotherKey1', value: 'anotherValue1Authored'},
-                    { key: 'key2', value: 'newVal2Authored' },
-                    { key: 'key3', value: 'newVal3Authored'},
-                    { key: 'anotherKey2', value: 'anotherValue2Authored'}
+                    {
+                      key: 'anotherKey1',
+                      value: 'anotherValue1Authored'
+                    },
+                    {
+                      key: 'key2',
+                      value: 'newVal2Authored'
+                    },
+                    {
+                      key: 'key3',
+                      value: 'newVal3Authored'
+                    },
+                    {
+                      key: 'anotherKey2',
+                      value: 'anotherValue2Authored'
+                    }
                   ],
                   slug: '/tab/grandkid',
                   published: true
@@ -98,10 +106,10 @@ describe('Override Options', function() {
               'apos.analytics-button-widgets.eventId': 'product-fixed-event-id',
               'apos.analytics-button-widgets.eventId3': function(req, options, path, val) {
                 return req.data.piece ? req.data.piece._id : val;
-              },
+              }
             },
             editable: {
-              'apos.analytics-button-widgets.eventId2': 'analyticsEventId',
+              'apos.analytics-button-widgets.eventId2': 'analyticsEventId'
             }
           }
         },
@@ -128,7 +136,7 @@ describe('Override Options', function() {
                 }
               ]
             }
-          ]  
+          ]
         }
       },
       afterInit: function(callback) {
@@ -136,12 +144,13 @@ describe('Override Options', function() {
         return callback(null);
       },
       afterListen: function(err) {
+        console.error(err);
         done();
       }
     });
     apos.testResults = {};
   });
-  
+
   it('should see the right options after pageBeforeSend', function(done) {
     request('http://localhost:7900/tab/grandkid', function(err, response, body) {
       assert(!err);
@@ -162,10 +171,37 @@ describe('Override Options', function() {
         assert.deepEqual(apos.testResults.channelIdsAppend, [ 3, 5, 5, 7, 9 ]);
         assert.deepEqual(apos.testResults.channelIdsAppendUnique, [ 3, 5, 7, 9 ]);
         assert.deepEqual(apos.testResults.channelIdsAppendEditable, [ 3, 5, 12 ]);
-        assert.deepEqual(apos.testResults.channelObjectsAppend, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}, {foo: 'foo', bar: 'bar'}]);
-        assert.deepEqual(apos.testResults.channelObjectsAppendUnique, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
-        assert.deepEqual(apos.testResults.channelObjectsAppendUniqueString, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
-        assert.deepEqual(apos.testResults.channelObjectsAppendUniqueFunc, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsAppend, [{
+          foo: 'bar',
+          bar: 'foo'
+        }, {
+          foo: 'foo',
+          bar: 'bar'
+        }, {
+          foo: 'foo',
+          bar: 'bar'
+        }]);
+        assert.deepEqual(apos.testResults.channelObjectsAppendUnique, [{
+          foo: 'bar',
+          bar: 'foo'
+        }, {
+          foo: 'foo',
+          bar: 'bar'
+        }]);
+        assert.deepEqual(apos.testResults.channelObjectsAppendUniqueString, [{
+          foo: 'bar',
+          bar: 'foo'
+        }, {
+          foo: 'foo',
+          bar: 'bar'
+        }]);
+        assert.deepEqual(apos.testResults.channelObjectsAppendUniqueFunc, [{
+          foo: 'bar',
+          bar: 'foo'
+        }, {
+          foo: 'foo',
+          bar: 'bar'
+        }]);
         done();
       });
     });
@@ -176,10 +212,37 @@ describe('Override Options', function() {
         assert(response.statusCode < 400);
         assert.deepEqual(apos.testResults.channelIdsPrepend, [ 5, 7, 9, 3, 5 ]);
         assert.deepEqual(apos.testResults.channelIdsPrependUnique, [ 7, 9, 3, 5 ]);
-        assert.deepEqual(apos.testResults.channelObjectsPrepend, [{foo: 'foo', bar: 'bar'}, {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
-        assert.deepEqual(apos.testResults.channelObjectsPrependUnique, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
-        assert.deepEqual(apos.testResults.channelObjectsPrependUniqueString, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
-        assert.deepEqual(apos.testResults.channelObjectsPrependUniqueFunc, [{foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'bar'}]);
+        assert.deepEqual(apos.testResults.channelObjectsPrepend, [{
+          foo: 'foo',
+          bar: 'bar'
+        }, {
+          foo: 'bar',
+          bar: 'foo'
+        }, {
+          foo: 'foo',
+          bar: 'bar'
+        }]);
+        assert.deepEqual(apos.testResults.channelObjectsPrependUnique, [{
+          foo: 'bar',
+          bar: 'foo'
+        }, {
+          foo: 'foo',
+          bar: 'bar'
+        }]);
+        assert.deepEqual(apos.testResults.channelObjectsPrependUniqueString, [{
+          foo: 'bar',
+          bar: 'foo'
+        }, {
+          foo: 'foo',
+          bar: 'bar'
+        }]);
+        assert.deepEqual(apos.testResults.channelObjectsPrependUniqueFunc, [{
+          foo: 'bar',
+          bar: 'foo'
+        }, {
+          foo: 'foo',
+          bar: 'bar'
+        }]);
         done();
       });
     });
@@ -188,13 +251,37 @@ describe('Override Options', function() {
       request('http://localhost:7900/tab/grandkid', function(err, response, body) {
         assert(!err);
         assert(response.statusCode < 400);
-        assert.deepEqual(apos.testResults.channelObjectsReplaceString, [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'newBar'} ]);
-        assert.deepEqual(apos.testResults.channelObjectsReplaceFunc, [ {foo: 'bar', bar: 'foo'}, {foo: 'foo', bar: 'newBar'} ]);
+        assert.deepEqual(apos.testResults.channelObjectsReplaceString, [ {
+          foo: 'bar',
+          bar: 'foo'
+        }, {
+          foo: 'foo',
+          bar: 'newBar'
+        } ]);
+        assert.deepEqual(apos.testResults.channelObjectsReplaceFunc, [ {
+          foo: 'bar',
+          bar: 'foo'
+        }, {
+          foo: 'foo',
+          bar: 'newBar'
+        } ]);
         assert.deepEqual(apos.testResults.channelObjectsReplaceEditable, [
-          { key: 'key1', value: 'val1' },
-          { key: 'key2', value: 'newVal2Authored' },
-          { key: 'key3', value: 'newVal3Authored' },
-          { key: 'key4', value: 'val4' }
+          {
+            key: 'key1',
+            value: 'val1'
+          },
+          {
+            key: 'key2',
+            value: 'newVal2Authored'
+          },
+          {
+            key: 'key3',
+            value: 'newVal3Authored'
+          },
+          {
+            key: 'key4',
+            value: 'val4'
+          }
         ]);
         done();
       });
@@ -205,12 +292,30 @@ describe('Override Options', function() {
         assert(!err);
         assert(response.statusCode < 400);
         var expected = [
-          { key: 'key1', value: 'val1' },
-          { key: 'key2', value: 'newVal2Authored' },
-          { key: 'key3', value: 'newVal3Authored' },
-          { key: 'key4', value: 'val4' },
-          { key: 'anotherKey1', value: 'anotherValue1Authored'},
-          { key: 'anotherKey2', value: 'anotherValue2Authored'}
+          {
+            key: 'key1',
+            value: 'val1'
+          },
+          {
+            key: 'key2',
+            value: 'newVal2Authored'
+          },
+          {
+            key: 'key3',
+            value: 'newVal3Authored'
+          },
+          {
+            key: 'key4',
+            value: 'val4'
+          },
+          {
+            key: 'anotherKey1',
+            value: 'anotherValue1Authored'
+          },
+          {
+            key: 'anotherKey2',
+            value: 'anotherValue2Authored'
+          }
         ];
         assert.deepEqual(apos.testResults.channelObjectsMerge, expected);
         assert.deepEqual(apos.testResults.channelObjectsMergeEditable, expected);
@@ -223,13 +328,22 @@ describe('Override Options', function() {
         assert(!err);
         assert(response.statusCode < 400);
         assert.deepEqual(apos.testResults.channelIdsRemove, [ 3 ]);
-        assert.deepEqual(apos.testResults.channelObjectsRemove, [{foo: 'bar', bar: 'foo'}]);
-        assert.deepEqual(apos.testResults.channelObjectsRemoveString, [{foo: 'bar', bar: 'foo'}]);
-        assert.deepEqual(apos.testResults.channelObjectsRemoveFunc, [{foo: 'bar', bar: 'foo'}]);
+        assert.deepEqual(apos.testResults.channelObjectsRemove, [{
+          foo: 'bar',
+          bar: 'foo'
+        }]);
+        assert.deepEqual(apos.testResults.channelObjectsRemoveString, [{
+          foo: 'bar',
+          bar: 'foo'
+        }]);
+        assert.deepEqual(apos.testResults.channelObjectsRemoveFunc, [{
+          foo: 'bar',
+          bar: 'foo'
+        }]);
         done();
       });
     });
-  })
+  });
 
   it('should see the impact of localized options for en', function(done) {
     // This URL is designed to work specifically with the mock workflow module provided
@@ -243,7 +357,7 @@ describe('Override Options', function() {
       done();
     });
   });
-  
+
   it('insert a test piece', function(done) {
     var piece = apos.modules.products.newInstance();
     _.assign(piece, {
@@ -283,7 +397,5 @@ describe('Override Options', function() {
       done();
     });
   });
-  
-});
 
-  
+});
