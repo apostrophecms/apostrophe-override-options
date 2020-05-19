@@ -94,7 +94,7 @@ module.exports = {
     // new value that is appropriate for `path`.
 
     self.getNewOptionValue = function(req, moduleOptions, sliced, val) {
-      if (val && (typeof (val) === 'object')) {
+      if (val && (typeof val === 'object')) {
         var comparator;
         if (typeof (val.comparator) === 'string') {
           comparator = function(value, other) {
